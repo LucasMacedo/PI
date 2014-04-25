@@ -10,15 +10,25 @@ package model;
  *
  * @author Lucas
  */
-public class Paciente {
+public class Paciente extends Pessoa {
     
     private Integer codigo;
 
-    public Paciente(Integer codigo) {
+    public Paciente(Integer codigo, String nome, String cpf, String endereco, String email, String telefone) {
+        super(nome, cpf, endereco, email, telefone);
         this.codigo = codigo;
     }
 
-    public Integer getCodigo() {
+    public Paciente(String nome, String cpf, String endereco, String email, String telefone) {
+        super(nome, cpf, endereco, email, telefone);
+    }
+
+    public Paciente(){
+        super();
+    }
+    
+
+   public Integer getCodigo() {
         return codigo;
     }
 

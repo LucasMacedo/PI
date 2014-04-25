@@ -29,7 +29,7 @@ public class PrincipalUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jMenuItem5 = new javax.swing.JMenuItem();
-        JIFTelaSecundaria = new javax.swing.JInternalFrame();
+        jdpTelaSecundaria = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         JMCadastro = new javax.swing.JMenu();
         JMICadastroMedico = new javax.swing.JMenuItem();
@@ -49,9 +49,18 @@ public class PrincipalUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        JIFTelaSecundaria.setMinimumSize(new java.awt.Dimension(500, 400));
-        JIFTelaSecundaria.setVisible(true);
-        JIFTelaSecundaria.getContentPane().setLayout(new java.awt.FlowLayout());
+        jdpTelaSecundaria.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jdpTelaSecundariaLayout = new javax.swing.GroupLayout(jdpTelaSecundaria);
+        jdpTelaSecundaria.setLayout(jdpTelaSecundariaLayout);
+        jdpTelaSecundariaLayout.setHorizontalGroup(
+            jdpTelaSecundariaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 763, Short.MAX_VALUE)
+        );
+        jdpTelaSecundariaLayout.setVerticalGroup(
+            jdpTelaSecundariaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 561, Short.MAX_VALUE)
+        );
 
         JMCadastro.setText("Cadastro");
 
@@ -131,11 +140,11 @@ public class PrincipalUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(JIFTelaSecundaria, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE)
+            .addComponent(jdpTelaSecundaria)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(JIFTelaSecundaria, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
+            .addComponent(jdpTelaSecundaria)
         );
 
         pack();
@@ -143,38 +152,38 @@ public class PrincipalUI extends javax.swing.JFrame {
 
     private void JMICadastroMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICadastroMedicoActionPerformed
        CadastrarMedicoUI cadastroMedicoUI = new CadastrarMedicoUI();
-       JIFTelaSecundaria.add(cadastroMedicoUI);
-       JIFTelaSecundaria.validate();
+       cadastroMedicoUI.setVisible(true);
+       jdpTelaSecundaria.add(cadastroMedicoUI);
     }//GEN-LAST:event_JMICadastroMedicoActionPerformed
 
     private void JMICadastroPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICadastroPacienteActionPerformed
        CadastrarPacienteUI cadastroPacienteUI =  new CadastrarPacienteUI();
-       JIFTelaSecundaria.add(cadastroPacienteUI);  
-       JIFTelaSecundaria.validate();    
+       cadastroPacienteUI.setVisible(true);
+       jdpTelaSecundaria.add(cadastroPacienteUI);
     }//GEN-LAST:event_JMICadastroPacienteActionPerformed
 
     private void JMICadastroConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICadastroConsultaActionPerformed
        CadastrarConsultaUI cadastroConsultaUI = new CadastrarConsultaUI();
-       JIFTelaSecundaria.add(cadastroConsultaUI);
-       JIFTelaSecundaria.validate();
+       cadastroConsultaUI.setVisible(true);
+       jdpTelaSecundaria.add(cadastroConsultaUI);
     }//GEN-LAST:event_JMICadastroConsultaActionPerformed
 
     private void JMIConsultaMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIConsultaMedicoActionPerformed
-       ConsultarMedico consultarMedico = new ConsultarMedico();
-       JIFTelaSecundaria.add(consultarMedico);
-       JIFTelaSecundaria.validate();
+       ConsultarMedicoUI consultarMedico = new ConsultarMedicoUI();
+       consultarMedico.setVisible(true);
+       jdpTelaSecundaria.add(consultarMedico);
     }//GEN-LAST:event_JMIConsultaMedicoActionPerformed
 
     private void JMIConsultaPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIConsultaPacienteActionPerformed
-       ConsultarPaciente consultarPaciente = new ConsultarPaciente();
-       JIFTelaSecundaria.add(consultarPaciente);
-       JIFTelaSecundaria.validate();
+       ConsultarPacienteUI consultarPaciente = new ConsultarPacienteUI();
+       consultarPaciente.setVisible(true);
+       jdpTelaSecundaria.add(consultarPaciente);
     }//GEN-LAST:event_JMIConsultaPacienteActionPerformed
 
     private void JMIConsultaConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIConsultaConsultaActionPerformed
-        ConsultarConsulta consultarConsulta = new ConsultarConsulta();
-        JIFTelaSecundaria.add(consultarConsulta);
-        JIFTelaSecundaria.validate();
+       ConsultarProntuarioUI consultarProntuario = new ConsultarProntuarioUI();
+       consultarProntuario.setVisible(true);
+       jdpTelaSecundaria.add(consultarProntuario);
     }//GEN-LAST:event_JMIConsultaConsultaActionPerformed
 
     /**
@@ -214,7 +223,6 @@ public class PrincipalUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JInternalFrame JIFTelaSecundaria;
     private javax.swing.JMenu JMCadastro;
     private javax.swing.JMenu JMConsulta;
     private javax.swing.JMenuItem JMICadastroConsulta;
@@ -230,5 +238,6 @@ public class PrincipalUI extends javax.swing.JFrame {
     private javax.swing.JMenu JMSair;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JDesktopPane jdpTelaSecundaria;
     // End of variables declaration//GEN-END:variables
 }

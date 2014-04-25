@@ -14,27 +14,17 @@ import java.util.Date;
  */
 public class Consulta {
     
-    private Integer codigo;
     private Date data;
     private String observacao;
     
     private Integer codMedico;
     private Integer codPaciente;
 
-    public Consulta(Integer codigo, Date data, String observacao, Integer codMedico, Integer codPaciente) {
-        this.codigo = codigo;
+    public Consulta(Date data, String observacao, Integer codMedico, Integer codPaciente) {
         this.data = data;
         this.observacao = observacao;
         this.codMedico = codMedico;
         this.codPaciente = codPaciente;
-    }
-
-    public Integer getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
     }
 
     public Date getData() {

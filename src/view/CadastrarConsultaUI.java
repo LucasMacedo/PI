@@ -10,10 +10,10 @@ package view;
  *
  * @author Lucas
  */
-public class CadastrarConsultaUI extends javax.swing.JPanel {
+public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
 
     /**
-     * Creates new form CadastroConsultaUI
+     * Creates new form CadastrarConsulta
      */
     public CadastrarConsultaUI() {
         initComponents();
@@ -28,7 +28,6 @@ public class CadastrarConsultaUI extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         JPPainelPrincipal = new javax.swing.JPanel();
         JPainelPaciente = new javax.swing.JPanel();
         JLNomePaciente = new javax.swing.JLabel();
@@ -57,7 +56,7 @@ public class CadastrarConsultaUI extends javax.swing.JPanel {
         JBSalvar = new javax.swing.JButton();
         JBCancelar = new javax.swing.JButton();
 
-        jLabel1.setText("jLabel1");
+        setClosable(true);
 
         JPPainelPrincipal.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cadastro de Consulta", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
@@ -96,10 +95,6 @@ public class CadastrarConsultaUI extends javax.swing.JPanel {
             }
         });
         JSPPaciente.setViewportView(JTabelaPaciente);
-        if (JTabelaPaciente.getColumnModel().getColumnCount() > 0) {
-            JTabelaPaciente.getColumnModel().getColumn(0).setMinWidth(30);
-            JTabelaPaciente.getColumnModel().getColumn(0).setMaxWidth(50);
-        }
 
         javax.swing.GroupLayout JPainelPacienteLayout = new javax.swing.GroupLayout(JPainelPaciente);
         JPainelPaciente.setLayout(JPainelPacienteLayout);
@@ -181,10 +176,6 @@ public class CadastrarConsultaUI extends javax.swing.JPanel {
             }
         });
         JSPMedico.setViewportView(JTabelaMedico);
-        if (JTabelaMedico.getColumnModel().getColumnCount() > 0) {
-            JTabelaMedico.getColumnModel().getColumn(0).setMinWidth(30);
-            JTabelaMedico.getColumnModel().getColumn(0).setMaxWidth(50);
-        }
 
         javax.swing.GroupLayout JPainelMedicoLayout = new javax.swing.GroupLayout(JPainelMedico);
         JPainelMedico.setLayout(JPainelMedicoLayout);
@@ -307,8 +298,8 @@ public class CadastrarConsultaUI extends javax.swing.JPanel {
 
         JBCancelar.setText("Cancelar");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -333,6 +324,8 @@ public class CadastrarConsultaUI extends javax.swing.JPanel {
                     .addComponent(JBCancelar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
@@ -364,6 +357,5 @@ public class CadastrarConsultaUI extends javax.swing.JPanel {
     private javax.swing.JTextField JTFNomePaciente;
     private javax.swing.JTable JTabelaMedico;
     private javax.swing.JTable JTabelaPaciente;
-    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

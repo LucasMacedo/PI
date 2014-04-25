@@ -10,14 +10,21 @@ package model;
  *
  * @author Lucas
  */
-public class Medico {
+public class Medico extends Pessoa {
     
     private Integer codigo;
     private Integer crm;
     private Integer codigoEspecialidade;
 
-    public Medico(Integer codigo, Integer crm, Integer codigoEspecialidade) {
+    public Medico(Integer codigo, Integer crm, Integer codigoEspecialidade, String nome,String cpf, String endereco, String email, String telefone) {
+        super(nome,cpf, endereco, email, telefone);
         this.codigo = codigo;
+        this.crm = crm;
+        this.codigoEspecialidade = codigoEspecialidade;
+    }
+
+    public Medico(Integer crm, Integer codigoEspecialidade, String nome,String cpf, String endereco, String email, String telefone) {
+        super(nome,cpf, endereco, email, telefone);
         this.crm = crm;
         this.codigoEspecialidade = codigoEspecialidade;
     }

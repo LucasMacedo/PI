@@ -12,27 +12,24 @@ package model;
  */
 public class Pessoa {
     
-    private Integer codigo;
     private String nome;
+    private String cpf;
     private String endereco;
     private String email;
-    private Integer telefone;
+    private String telefone;
 
-    public Pessoa(Integer codigo, String nome, String endereco, String email, Integer telefone) {
-        this.codigo = codigo;
+    public Pessoa(String nome,String cpf, String endereco, String email, String telefone) {
         this.nome = nome;
+        this.cpf = cpf;
         this.endereco = endereco;
         this.email = email;
         this.telefone = telefone;
     }
 
-    public Integer getCodigo() {
-        return codigo;
+    public Pessoa() {
     }
-
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
-    }
+    
+    
 
     public String getNome() {
         return nome;
@@ -58,13 +55,22 @@ public class Pessoa {
         this.email = email;
     }
 
-    public Integer getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(Integer telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+    
     
     
     
