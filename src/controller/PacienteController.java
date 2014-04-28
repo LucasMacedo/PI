@@ -7,6 +7,7 @@
 package controller;
 
 import dao.PacienteDao;
+import java.util.ArrayList;
 import model.Paciente;
 
 /**
@@ -39,6 +40,10 @@ public class PacienteController {
         }
     
         PacienteDao.obterInstancia().incluir(paciente);
+    }
+    
+    public ArrayList listarPaciente(){
+        return PacienteDao.obterInstancia().obterLista();
     }
     
 }

@@ -65,6 +65,11 @@ public class CadastrarPacienteUI extends javax.swing.JInternalFrame {
         });
 
         JBCancelar.setText("Cancelar");
+        JBCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBCancelarActionPerformed(evt);
+            }
+        });
 
         try {
             JFTFCPF.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
@@ -164,9 +169,13 @@ public class CadastrarPacienteUI extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null,"Cadastro com Sucesso");
             this.dispose();
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null,"Erro: "+ e,"ERRO", 0);
+            JOptionPane.showMessageDialog(null,"Erro: "+e.getMessage(),"ERRO", 0);
         }
     }//GEN-LAST:event_JBSalvarActionPerformed
+
+    private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_JBCancelarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

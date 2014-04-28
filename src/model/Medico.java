@@ -29,6 +29,12 @@ public class Medico extends Pessoa {
         this.codigoEspecialidade = codigoEspecialidade;
     }
 
+    public Medico() {
+        super();
+    }
+
+    
+    
     public Integer getCodigo() {
         return codigo;
     }

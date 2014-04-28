@@ -6,6 +6,14 @@
 
 package view;
 
+import controller.EspecialidadeController;
+import controller.MedicoController;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import model.Especialidade;
+import model.Medico;
+
 /**
  *
  * @author Lucas
@@ -15,8 +23,11 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
     /**
      * Creates new form CadastrarMedico
      */
+    private ArrayList<Especialidade> listaEspecialidade;
+    
     public CadastrarMedicoUI() {
         initComponents();
+        ComboBoxEspecialidade();
     }
 
     /**
@@ -32,17 +43,17 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
         JLNome = new javax.swing.JLabel();
         JTFNome = new javax.swing.JTextField();
         JLCPF = new javax.swing.JLabel();
+        JFTCpf = new javax.swing.JFormattedTextField();
         JLCRM = new javax.swing.JLabel();
         JTFCRM = new javax.swing.JTextField();
         JLEspecialidade = new javax.swing.JLabel();
         JCBEspecialidade = new javax.swing.JComboBox();
         JLTelefone = new javax.swing.JLabel();
+        jFTelefone = new javax.swing.JFormattedTextField();
         JLEndereco = new javax.swing.JLabel();
         JTFEndereco = new javax.swing.JTextField();
         JBSalvar = new javax.swing.JButton();
         JBCancelar = new javax.swing.JButton();
-        JFTCRM = new javax.swing.JFormattedTextField();
-        jFTelefone = new javax.swing.JFormattedTextField();
 
         setClosable(true);
 
@@ -52,29 +63,39 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
 
         JLCPF.setText("CPF :");
 
+        try {
+            JFTCpf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
         JLCRM.setText("CRM :");
 
         JLEspecialidade.setText("Especialidade:");
 
         JLTelefone.setText("Telefone :");
 
-        JLEndereco.setText("Endereco :");
-
-        JBSalvar.setText("Salvar");
-
-        JBCancelar.setText("Cancelar");
-
-        try {
-            JFTCRM.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-
         try {
             jFTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##) ####-####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+
+        JLEndereco.setText("Endereco :");
+
+        JBSalvar.setText("Salvar");
+        JBSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBSalvarActionPerformed(evt);
+            }
+        });
+
+        JBCancelar.setText("Cancelar");
+        JBCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -95,7 +116,7 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(JTFCRM)
-                            .addComponent(JFTCRM, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)))
+                            .addComponent(JFTCpf, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(JLEspecialidade)
                         .addGap(18, 18, 18)
@@ -127,7 +148,7 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
                 .addGap(14, 14, 14)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JLCPF)
-                    .addComponent(JFTCRM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(JFTCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JLCRM)
@@ -171,12 +192,46 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void JBSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSalvarActionPerformed
+        try{
+            Medico medico = new Medico();
+            medico.setNome(JTFNome.getText());
+            medico.setCpf(JFTCpf.getText());
+            medico.setCrm(Integer.parseInt(JTFCRM.getText()));
+            if(JLEspecialidade.getText().equals("Otorino")){
+                medico.setCodigoEspecialidade(2);
+            }else{
+                medico.setCodigoEspecialidade(1);
+            }
+            medico.setTelefone(jFTelefone.getText());
+            medico.setEndereco(JTFEndereco.getText());
+
+            MedicoController.obterInstancia().cadastar(medico);
+            JOptionPane.showMessageDialog(null, "Cadastrado com sucesso !");
+            this.dispose();
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Erro: "+e.getMessage(),"ERRO",0);
+        }
+    }//GEN-LAST:event_JBSalvarActionPerformed
+
+    private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_JBCancelarActionPerformed
+
+    private void ComboBoxEspecialidade(){
+        DefaultComboBoxModel modelo = new DefaultComboBoxModel();
+        this.listaEspecialidade = EspecialidadeController.obterInstancia().obterLista();
+        for (Especialidade listaEspecialidade1 : this.listaEspecialidade) {
+            modelo.addElement(listaEspecialidade1.getNome());
+        }
+        JCBEspecialidade.setModel(modelo);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBCancelar;
     private javax.swing.JButton JBSalvar;
     private javax.swing.JComboBox JCBEspecialidade;
-    private javax.swing.JFormattedTextField JFTCRM;
+    private javax.swing.JFormattedTextField JFTCpf;
     private javax.swing.JLabel JLCPF;
     private javax.swing.JLabel JLCRM;
     private javax.swing.JLabel JLEndereco;
