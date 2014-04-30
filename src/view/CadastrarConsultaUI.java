@@ -6,6 +6,14 @@
 
 package view;
 
+import controller.MedicoController;
+import controller.PacienteController;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Medico;
+import model.Paciente;
+
 /**
  *
  * @author Lucas
@@ -15,6 +23,9 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
     /**
      * Creates new form CadastrarConsulta
      */
+    private ArrayList<Paciente> listaPaciente;
+    private ArrayList<Medico> listaMedico;
+    
     public CadastrarConsultaUI() {
         initComponents();
     }
@@ -65,6 +76,11 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
         JLNomePaciente.setText("Nome do Paciente :");
 
         JBProcurarPaciente.setText("Procurar");
+        JBProcurarPaciente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBProcurarPacienteActionPerformed(evt);
+            }
+        });
 
         JLCodigoPaciente.setText("Codigo Paciente :");
 
@@ -148,6 +164,11 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
         JLCRM.setText("CRM :");
 
         JBProcurarMedico.setText("Procurar");
+        JBProcurarMedico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBProcurarMedicoActionPerformed(evt);
+            }
+        });
 
         JTabelaMedico.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -184,17 +205,19 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
             .addGroup(JPainelMedicoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(JPainelMedicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(JSPMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(JPainelMedicoLayout.createSequentialGroup()
-                        .addGroup(JPainelMedicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(JLNomeMedico)
-                            .addComponent(JLCRM))
-                        .addGap(18, 18, 18)
-                        .addGroup(JPainelMedicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(JTFNomeMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(JTFCRM, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(JBProcurarMedico))))
+                    .addComponent(JLNomeMedico)
+                    .addComponent(JLCRM))
+                .addGap(18, 18, 18)
+                .addGroup(JPainelMedicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JTFNomeMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JTFCRM, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(JBProcurarMedico)
+                .addGap(45, 45, 45))
+            .addGroup(JPainelMedicoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(JSPMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         JPainelMedicoLayout.setVerticalGroup(
             JPainelMedicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,26 +267,29 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
             .addGroup(JPPainelPrincipalLayout.createSequentialGroup()
                 .addGroup(JPPainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(JPPainelPrincipalLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
                         .addGroup(JPPainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(JPPainelPrincipalLayout.createSequentialGroup()
-                                .addComponent(JLProcedimento)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(JSProcedimento, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(JPainelPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(JPPainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(JPainelMedico, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, JPPainelPrincipalLayout.createSequentialGroup()
-                                .addComponent(JLObservacao)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(JSPObservacao))))
+                                .addGap(10, 10, 10)
+                                .addGroup(JPPainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(JLProcedimento)
+                                    .addComponent(JPainelPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(JPPainelPrincipalLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(JSProcedimento, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(JPPainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(JPPainelPrincipalLayout.createSequentialGroup()
+                                .addGroup(JPPainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(JLObservacao)
+                                    .addComponent(JSPObservacao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(JPainelMedico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(JPPainelPrincipalLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(JLDataConsulta)
                         .addGap(18, 18, 18)
                         .addComponent(JFTDataConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         JPPainelPrincipalLayout.setVerticalGroup(
             JPPainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,24 +303,19 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
                     .addGroup(JPPainelPrincipalLayout.createSequentialGroup()
                         .addComponent(JPainelPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(JPPainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(JLProcedimento)
-                            .addComponent(JSProcedimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())
+                        .addComponent(JLProcedimento))
                     .addGroup(JPPainelPrincipalLayout.createSequentialGroup()
                         .addComponent(JPainelMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(JPPainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(JPPainelPrincipalLayout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addComponent(JLObservacao)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPPainelPrincipalLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(JSPObservacao, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())))))
+                        .addGap(18, 18, 18)
+                        .addComponent(JLObservacao)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(JPPainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JSProcedimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JSPObservacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14))
         );
 
-        JBSalvar.setText("Salvar Consulta");
+        JBSalvar.setText("Salvar");
 
         JBCancelar.setText("Cancelar");
 
@@ -302,12 +323,12 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(JBSalvar)
-                .addGap(28, 28, 28)
+                .addGap(18, 18, 18)
                 .addComponent(JBCancelar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(323, 323, 323))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(JPPainelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -318,17 +339,122 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(JPPainelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JBSalvar)
                     .addComponent(JBCancelar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void JBProcurarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBProcurarPacienteActionPerformed
+       DefaultTableModel modelo = new DefaultTableModel();
+       modelo.setColumnIdentifiers(new String[] {"Codigo","Nome"});
+       this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+       try{
+       JTabelaPaciente.setModel(verificarPaciente(modelo));
+       }catch(Exception e){
+           JOptionPane.showMessageDialog(null, "Erro: "+e.getMessage(),"ERRO",0);
+       }
+    }//GEN-LAST:event_JBProcurarPacienteActionPerformed
 
+    private void JBProcurarMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBProcurarMedicoActionPerformed
+       DefaultTableModel modelo = new DefaultTableModel();
+       modelo.setColumnIdentifiers(new String[] {"CRM","Nome"});
+       this.listaMedico = MedicoController.obterInstancia().listarMedico();
+       try{
+       JTabelaMedico.setModel(verificarMedico(modelo));
+       }catch(Exception e){
+           JOptionPane.showMessageDialog(null, "Erro: "+e.getMessage(),"ERRO",0);
+       }
+    }//GEN-LAST:event_JBProcurarMedicoActionPerformed
+
+    private DefaultTableModel verificarPaciente(DefaultTableModel modelo) throws Exception{
+       String nome = JTFNomePaciente.getText();
+       Integer codigo;
+       try{
+           codigo = Integer.parseInt(JTFCodigoPaciente.getText());
+       }catch(Exception e){
+           codigo = 0;
+       }
+       
+       for(int i=0;i< this.listaPaciente.size(); i++){
+          if(!nome.isEmpty() && codigo != 0){
+              if(this.listaPaciente.get(i).getCodigo() == codigo && 
+                       !this.listaPaciente.get(i).getNome().equals(nome)){
+                  throw new Exception("Codigo e nome diferentes !!");
+              }
+              
+              if(this.listaPaciente.get(i).getCodigo().equals(codigo)){
+                  modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                              this.listaPaciente.get(i).getNome()});
+              }              
+          }else
+          if(!nome.isEmpty() && codigo == 0){
+              if(this.listaPaciente.get(i).getNome().contains(nome)){
+                  modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                              this.listaPaciente.get(i).getNome()});
+              }
+          }else
+          if(nome.isEmpty() && codigo != 0){
+              if(this.listaPaciente.get(i).getCodigo().equals(codigo)){
+                  modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                              this.listaPaciente.get(i).getNome()}); 
+              }
+          }else
+          if(nome.isEmpty() && codigo ==0){
+               modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                              this.listaPaciente.get(i).getNome()}); 
+          }
+       }
+       
+       return modelo;
+    }
+    
+    private DefaultTableModel verificarMedico(DefaultTableModel modelo) throws Exception{
+       String nome = JTFNomeMedico.getText();
+       Integer codigo;
+       try{
+           codigo = Integer.parseInt(JTFCRM.getText());
+       }catch(Exception e){
+           codigo = 0;
+       }
+       
+       for(int i=0;i< this.listaMedico.size(); i++){
+          if(!nome.isEmpty() && codigo != 0){
+              if(this.listaMedico.get(i).getCrm() == codigo && 
+                       !this.listaMedico.get(i).getNome().equals(nome)){
+                  throw new Exception("Codigo e nome diferentes !!");
+              }
+              
+              if(this.listaMedico.get(i).getCrm()== codigo){
+                  modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
+                                              this.listaMedico.get(i).getNome()});
+              }              
+          }else
+          if(!nome.isEmpty() && codigo == 0){
+              if(this.listaMedico.get(i).getNome().contains(nome)){
+                  modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
+                                              this.listaMedico.get(i).getNome()});
+              }
+          }else
+          if(nome.isEmpty() && codigo != 0){
+              if(this.listaMedico.get(i).getCrm() == codigo){
+                  modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
+                                              this.listaMedico.get(i).getNome()}); 
+              }
+          }else
+          if(nome.isEmpty() && codigo ==0){
+               modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
+                                              this.listaMedico.get(i).getNome()}); 
+          }
+       }
+       
+       return modelo;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBCancelar;
     private javax.swing.JButton JBProcurarMedico;

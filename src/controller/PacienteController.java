@@ -17,11 +17,14 @@ import model.Paciente;
 public class PacienteController {
     
     private static PacienteController instanciaRep;
+    private static Integer id;
     
     public static PacienteController obterInstancia(){
         if(instanciaRep == null){
             instanciaRep = new PacienteController();
+            id = 0;
         }
+        id++;
         return instanciaRep;
     }
     
@@ -38,7 +41,8 @@ public class PacienteController {
         if(paciente.getEndereco().isEmpty()){
             throw new Exception("Endereço invalido !!");
         }
-    
+            paciente.setCodigo(id);
+        
         PacienteDao.obterInstancia().incluir(paciente);
     }
     
