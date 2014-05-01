@@ -10,6 +10,7 @@ import controller.EspecialidadeController;
 import controller.MedicoController;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Especialidade;
 import model.Medico;
@@ -99,6 +100,7 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        JTListaMedico.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(JTListaMedico);
 
         JBListar.setText("Listar");
@@ -211,7 +213,14 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBPesquisarActionPerformed
-        // TODO add your handling code here:
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new String[] {"CRM","Nome","Especialidade"});
+        this.listaMedico = MedicoController.obterInstancia().listarMedico();
+        try{
+           JTListaMedico.setModel(verificarFiltros(modelo)); 
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Erro: "+e.getMessage(),"ERRO", 0);
+        }
     }//GEN-LAST:event_JBPesquisarActionPerformed
  
     private void JBListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBListarActionPerformed
@@ -219,9 +228,17 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
         modelo.setColumnIdentifiers(new String[] {"CRM","Nome","Especialidade"});
         this.listaMedico = MedicoController.obterInstancia().listarMedico();
         for (int i=0; i< this.listaMedico.size();i++) {
+            String especialidade = null;
+            for(int y=0;y<this.listaEspecialidade.size();y++){
+                if(this.listaMedico.get(i).getCodigoEspecialidade().
+                        equals(this.listaEspecialidade.get(y).getCodigo())){
+                    especialidade = this.listaEspecialidade.get(y).getNome();
+                }
+            }
+            
             modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
                                         this.listaMedico.get(i).getNome(),
-                                        this.listaMedico.get(i).getCodigoEspecialidade()});
+                                        especialidade});
         }
         
         JTListaMedico.setModel(modelo);
@@ -239,7 +256,7 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_JBRemoverActionPerformed
 
-     private void ComboBoxEspecialidade(){
+    private void ComboBoxEspecialidade(){
         DefaultComboBoxModel modelo = new DefaultComboBoxModel();
         this.listaEspecialidade = EspecialidadeController.obterInstancia().obterLista();
         for (Especialidade listaEspecialidade1 : this.listaEspecialidade) {
@@ -247,6 +264,69 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
         }
         JCBEspecialidade.setModel(modelo);
     }
+     
+    private DefaultTableModel verificarFiltros(DefaultTableModel modelo) throws Exception{
+        String nome = JTFNome.getText();
+        Integer especialidade = JCBEspecialidade.getSelectedIndex();
+        String nomeEsp = null;
+        Integer crm; 
+          try{
+              crm  = Integer.parseInt(JTFCrm.getText());
+          }catch(Exception e){
+              crm = null;
+          }
+        
+        for(int i=0; i< this.listaMedico.size();i++){
+            
+            if(especialidade != null){
+                for(int y=0;y < this.listaEspecialidade.size();y++){
+                    if(this.listaMedico.get(i).getCodigoEspecialidade().equals(
+                                   this.listaEspecialidade.get(y).getCodigo())){
+                        nomeEsp = this.listaEspecialidade.get(y).getNome();
+                    }
+                }
+            }
+            
+            if(!nome.isEmpty() && crm != null && !especialidade.equals(0)){
+                if(this.listaMedico.get(i).getCrm().equals(crm) &&
+                        !this.listaMedico.get(i).getNome().equals(nome) &&
+                          !this.listaMedico.get(i).getCodigoEspecialidade().equals(especialidade)){
+                    throw new Exception("Os dados nao estao iguais");
+                }
+                
+            }else
+            if(!nome.isEmpty() && crm == null && !especialidade.equals(0)){
+                if(this.listaMedico.get(i).getNome().contains(nome)){
+                     modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
+                                            this.listaMedico.get(i).getNome(),
+                                            nomeEsp});
+                }
+            }else
+            if(nome.isEmpty() && crm != null && especialidade.equals(0)){
+                if(this.listaMedico.get(i).getCrm().equals(crm)){
+                    modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
+                                            this.listaMedico.get(i).getNome(),
+                                            nomeEsp});                    
+                }
+            }else
+            if(nome.isEmpty() && crm == null && !especialidade.equals(0)){
+                if(this.listaMedico.get(i).getCodigoEspecialidade().equals(especialidade)){
+                    modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
+                                            this.listaMedico.get(i).getNome(),
+                                            nomeEsp}); 
+                }
+            }else
+            if(nome.isEmpty() && crm == null && especialidade.equals(0)){
+                 modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
+                                            this.listaMedico.get(i).getNome(),
+                                            nomeEsp}); 
+            }
+            
+        }
+        
+        return modelo;
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBAdicionar;

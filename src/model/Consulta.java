@@ -16,7 +16,9 @@ public class Consulta {
     
     private Date data;
     private String observacao;
+    private String procedimento;
     
+    private Integer codigo;
     private Integer codMedico;
     private Integer codPaciente;
 
@@ -27,6 +29,17 @@ public class Consulta {
         this.codPaciente = codPaciente;
     }
 
+    public Consulta() {
+    }
+
+    public Integer getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
+    }
+    
     public Date getData() {
         return data;
     }
@@ -58,6 +71,16 @@ public class Consulta {
     public void setCodPaciente(Integer codPaciente) {
         this.codPaciente = codPaciente;
     }
+
+    public String getProcedimento() {
+        return procedimento;
+    }
+
+    public void setProcedimento(String procedimento) {
+        this.procedimento = procedimento;
+    }
+    
+    
 
     
     

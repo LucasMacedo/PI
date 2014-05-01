@@ -198,11 +198,7 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
             medico.setNome(JTFNome.getText());
             medico.setCpf(JFTCpf.getText());
             medico.setCrm(Integer.parseInt(JTFCRM.getText()));
-            if(JLEspecialidade.getText().equals("Otorino")){
-                medico.setCodigoEspecialidade(2);
-            }else{
-                medico.setCodigoEspecialidade(1);
-            }
+            medico.setCodigoEspecialidade(JCBEspecialidade.getSelectedIndex());
             medico.setTelefone(jFTelefone.getText());
             medico.setEndereco(JTFEndereco.getText());
 

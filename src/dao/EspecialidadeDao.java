@@ -27,6 +27,7 @@ public class EspecialidadeDao {
     
     public EspecialidadeDao(){
         this.listaEspecialidade = new ArrayList<Especialidade>();
+        this.listaEspecialidade.add(new Especialidade(0, "Não Selecionado"));
         this.listaEspecialidade.add(new Especialidade(1, "Otorino"));
         this.listaEspecialidade.add(new Especialidade(2, "Clinico Geral"));
     }

@@ -35,7 +35,7 @@ public class MedicoController {
         if(medico.getCrm() == null){
             throw new Exception("CRM Invalido !!");
         }
-        if(medico.getCodigoEspecialidade() == null){
+        if(medico.getCodigoEspecialidade().equals(0)){
             throw new Exception("Especialidade Invalido !!");
         }
         if(medico.getTelefone().isEmpty()){

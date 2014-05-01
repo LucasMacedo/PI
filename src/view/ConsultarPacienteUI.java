@@ -95,6 +95,7 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        JTListaPaciente.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(JTListaPaciente);
 
         JBListar.setText("Listar");
@@ -204,7 +205,7 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(14, Short.MAX_VALUE)))
+                    .addContainerGap(15, Short.MAX_VALUE)))
         );
 
         pack();

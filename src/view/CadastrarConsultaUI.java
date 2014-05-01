@@ -6,11 +6,15 @@
 
 package view;
 
+import controller.ConsultaController;
 import controller.MedicoController;
 import controller.PacienteController;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.Consulta;
 import model.Medico;
 import model.Paciente;
 
@@ -25,6 +29,7 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
      */
     private ArrayList<Paciente> listaPaciente;
     private ArrayList<Medico> listaMedico;
+    private DefaultTableModel modelo, modeloMedico;
     
     public CadastrarConsultaUI() {
         initComponents();
@@ -110,6 +115,7 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        JTabelaPaciente.getTableHeader().setReorderingAllowed(false);
         JSPPaciente.setViewportView(JTabelaPaciente);
 
         javax.swing.GroupLayout JPainelPacienteLayout = new javax.swing.GroupLayout(JPainelPaciente);
@@ -196,6 +202,7 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        JTabelaMedico.getTableHeader().setReorderingAllowed(false);
         JSPMedico.setViewportView(JTabelaMedico);
 
         javax.swing.GroupLayout JPainelMedicoLayout = new javax.swing.GroupLayout(JPainelMedico);
@@ -288,17 +295,18 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
                         .addContainerGap()
                         .addComponent(JLDataConsulta)
                         .addGap(18, 18, 18)
-                        .addComponent(JFTDataConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(JFTDataConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         JPPainelPrincipalLayout.setVerticalGroup(
             JPPainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPPainelPrincipalLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(13, 13, 13)
                 .addGroup(JPPainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JLDataConsulta)
                     .addComponent(JFTDataConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(13, 13, 13)
                 .addGroup(JPPainelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(JPPainelPrincipalLayout.createSequentialGroup()
                         .addComponent(JPainelPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -316,6 +324,11 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
         );
 
         JBSalvar.setText("Salvar");
+        JBSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBSalvarActionPerformed(evt);
+            }
+        });
 
         JBCancelar.setText("Cancelar");
 
@@ -350,7 +363,7 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBProcurarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBProcurarPacienteActionPerformed
-       DefaultTableModel modelo = new DefaultTableModel();
+       modelo = new DefaultTableModel();
        modelo.setColumnIdentifiers(new String[] {"Codigo","Nome"});
        this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
        try{
@@ -361,15 +374,48 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBProcurarPacienteActionPerformed
 
     private void JBProcurarMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBProcurarMedicoActionPerformed
-       DefaultTableModel modelo = new DefaultTableModel();
-       modelo.setColumnIdentifiers(new String[] {"CRM","Nome"});
+       modeloMedico = new DefaultTableModel();
+       modeloMedico.setColumnIdentifiers(new String[] {"CRM","Nome"});
        this.listaMedico = MedicoController.obterInstancia().listarMedico();
        try{
-       JTabelaMedico.setModel(verificarMedico(modelo));
+       JTabelaMedico.setModel(verificarMedico(modeloMedico));
        }catch(Exception e){
            JOptionPane.showMessageDialog(null, "Erro: "+e.getMessage(),"ERRO",0);
        }
     }//GEN-LAST:event_JBProcurarMedicoActionPerformed
+
+    private void JBSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSalvarActionPerformed
+        try{
+            Consulta consulta = new Consulta();
+            // Obtenção das Linhas
+            int linhaMedico = JTabelaMedico.getSelectedRow();
+            int linhaPaciente = JTabelaPaciente.getSelectedRow();
+            
+           // Obtem os dados pela linha selecionada
+            try{
+                consulta.setCodMedico((int) modeloMedico.getValueAt(linhaMedico,0));
+                consulta.setCodPaciente((int) modelo.getValueAt(linhaPaciente,0));
+            }catch(Exception e){}
+            
+            
+            consulta.setProcedimento(JTAProcedimento.getText());
+            consulta.setObservacao(JTAObservacao.getText());
+           
+            try{
+                // Manipulação da Data 
+                Date data;
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/YYYY");
+                data = sdf.parse(JFTDataConsulta.getText());
+                consulta.setData(data);
+            }catch(Exception e){}
+            
+            ConsultaController.obterInstancia().cadastrar(consulta);
+            JOptionPane.showMessageDialog(null, "Cadastrado com sucesso !");
+            this.dispose();            
+        }catch(Exception e){
+           JOptionPane.showMessageDialog(null, "Erro: "+e.getMessage(),"ERRO",0);
+        }
+    }//GEN-LAST:event_JBSalvarActionPerformed
 
     private DefaultTableModel verificarPaciente(DefaultTableModel modelo) throws Exception{
        String nome = JTFNomePaciente.getText();
@@ -454,7 +500,7 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
        
        return modelo;
     }
-    
+ 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBCancelar;
     private javax.swing.JButton JBProcurarMedico;
@@ -484,4 +530,5 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
     private javax.swing.JTable JTabelaMedico;
     private javax.swing.JTable JTabelaPaciente;
     // End of variables declaration//GEN-END:variables
+    
 }
