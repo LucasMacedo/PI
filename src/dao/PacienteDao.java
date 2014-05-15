@@ -27,6 +27,8 @@ public class PacienteDao {
     
     public PacienteDao(){
         listaPaciente = new ArrayList<Paciente>();
+        listaPaciente.add(new Paciente(1,"Lucas","999.999.999-99"));
+        listaPaciente.add(new Paciente(2,"Alex","000.000.000-00"));
     }
     
     public void incluir(Paciente paciente){

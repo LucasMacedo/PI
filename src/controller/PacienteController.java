@@ -32,7 +32,7 @@ public class PacienteController {
         if(paciente.getNome().isEmpty()){
             throw new Exception("Nome esta invalido !!");
         }
-        if(paciente.getCpf().isEmpty()){
+        if(paciente.getCpf().equals("   .   .   -  ")){
             throw new Exception("CPF esta invalido !!");
         }
         if(paciente.getTelefone().isEmpty()){

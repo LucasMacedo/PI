@@ -266,13 +266,15 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
     }
      
     private DefaultTableModel verificarFiltros(DefaultTableModel modelo) throws Exception{
-        String nome = JTFNome.getText();
-        Integer especialidade = JCBEspecialidade.getSelectedIndex();
-        String nomeEsp = null;
-        Integer crm; 
+        String nome = JTFNome.getText(); // Recebe o nome escrito no filtro
+        Integer especialidade = JCBEspecialidade.getSelectedIndex(); // Recebe a especialidade
+        String nomeEsp = null; // Armazena o nome da especialidade 
+        Integer crm;  // Recebe o crm escrito no filtro
+        
+        // Transforma o CRM em numero
           try{
               crm  = Integer.parseInt(JTFCrm.getText());
-          }catch(Exception e){
+          }catch(NumberFormatException e){
               crm = null;
           }
         
@@ -287,36 +289,75 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
                 }
             }
             
+            // Verifica todos os dados 
             if(!nome.isEmpty() && crm != null && !especialidade.equals(0)){
-                if(this.listaMedico.get(i).getCrm().equals(crm) &&
-                        !this.listaMedico.get(i).getNome().equals(nome) &&
-                          !this.listaMedico.get(i).getCodigoEspecialidade().equals(especialidade)){
-                    throw new Exception("Os dados nao estao iguais");
-                }
                 
+                // Faz a verificação se todos os dados são IGUAIS
+                if(this.listaMedico.get(i).getCrm().equals(crm) &&
+                        this.listaMedico.get(i).getNome().equals(nome) &&
+                            this.listaMedico.get(i).getCodigoEspecialidade().equals(especialidade)){
+                   
+                    modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
+                                            this.listaMedico.get(i).getNome(),
+                                            nomeEsp});
+                }else{ 
+                     if(this.listaMedico.get(i).getCrm().equals(crm) &&         // Verifica se o CRM e o nome são 
+                            !this.listaMedico.get(i).getNome().equals(nome)){   //Diferentes 
+                                                
+                        if(this.listaMedico.get(i).getCodigoEspecialidade().equals(especialidade)){
+                            throw new Exception("Dados incorretos !! O nome esta Incorreto");
+                        }else 
+                        if(!this.listaMedico.get(i).getCodigoEspecialidade().equals(especialidade)){
+                             throw new Exception("Dados incorretos !! O nome e a especialidade esta Incorretos");
+                        }
+                    }else
+                    if(this.listaMedico.get(i).getCrm().equals(crm) &&
+                            this.listaMedico.get(i).getNome().equals(nome)){
+                        
+                        if(!this.listaMedico.get(i).getCodigoEspecialidade().equals(especialidade)){
+                             throw new Exception("Dados incorretos !! A especialidade esta Incorretos");
+                        }
+                    }
+                }
+                    
             }else
             if(!nome.isEmpty() && crm == null && !especialidade.equals(0)){
-                if(this.listaMedico.get(i).getNome().contains(nome)){
+                
+                if(this.listaMedico.get(i).getNome().contains(nome) &&
+                        this.listaMedico.get(i).getCodigoEspecialidade().equals(especialidade)){
+                    modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
+                                            this.listaMedico.get(i).getNome(),
+                                            nomeEsp});
+                }else
+                 if(this.listaMedico.get(i).getNome().contains(nome) &&
+                        !this.listaMedico.get(i).getCodigoEspecialidade().equals(especialidade)){
+                     throw new Exception("Nome e especialidade são diferentes");
+                 }
+                
+            }else
+                
+            if(!nome.isEmpty() && crm == null && especialidade.equals(0)){      // Verifica se somente o nome esta
+                if(this.listaMedico.get(i).getNome().contains(nome)){           // Preenchido
                      modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
                                             this.listaMedico.get(i).getNome(),
                                             nomeEsp});
                 }
             }else
-            if(nome.isEmpty() && crm != null && especialidade.equals(0)){
-                if(this.listaMedico.get(i).getCrm().equals(crm)){
+            if(nome.isEmpty() && crm != null && especialidade.equals(0)){       // Verifica se somente o crm esta
+                if(this.listaMedico.get(i).getCrm().equals(crm)){               // Preenchido
                     modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
                                             this.listaMedico.get(i).getNome(),
                                             nomeEsp});                    
                 }
             }else
-            if(nome.isEmpty() && crm == null && !especialidade.equals(0)){
-                if(this.listaMedico.get(i).getCodigoEspecialidade().equals(especialidade)){
+            if(nome.isEmpty() && crm == null && !especialidade.equals(0)){      // Verifica a especialidade esta
+                if(this.listaMedico.get(i).getCodigoEspecialidade().equals(especialidade)){ // Preenchida
                     modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
                                             this.listaMedico.get(i).getNome(),
                                             nomeEsp}); 
                 }
             }else
-            if(nome.isEmpty() && crm == null && especialidade.equals(0)){
+            if(nome.isEmpty() && crm == null && especialidade.equals(0)){       // Verifica se todos estão vazios
                  modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
                                             this.listaMedico.get(i).getNome(),
                                             nomeEsp}); 
@@ -324,7 +365,11 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
             
         }
         
-        return modelo;
+        if(modelo.getRowCount() != 0){
+            return modelo;
+        }else{
+            throw new Exception("Nenhum dado Cadastrado");
+        }
     }
     
 

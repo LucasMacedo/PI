@@ -23,6 +23,11 @@ public class Paciente extends Pessoa {
         super(nome, cpf, endereco, email, telefone);
     }
 
+    public Paciente(Integer codigo, String nome, String cpf) {
+        super(nome, cpf);
+        this.codigo = codigo;
+    }
+    
     public Paciente(){
         super();
     }

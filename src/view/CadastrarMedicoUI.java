@@ -25,7 +25,7 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
      */
     private ArrayList<Especialidade> listaEspecialidade;
     
-    public CadastrarMedicoUI() {
+    public CadastrarMedicoUI(Medico medico) {
         initComponents();
         ComboBoxEspecialidade();
     }
@@ -201,10 +201,11 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
             medico.setCodigoEspecialidade(JCBEspecialidade.getSelectedIndex());
             medico.setTelefone(jFTelefone.getText());
             medico.setEndereco(JTFEndereco.getText());
-
             MedicoController.obterInstancia().cadastar(medico);
             JOptionPane.showMessageDialog(null, "Cadastrado com sucesso !");
             this.dispose();
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null,"Erro: CRM só aceita numeros","ERRO",0);
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,"Erro: "+e.getMessage(),"ERRO",0);
         }

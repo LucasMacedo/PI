@@ -31,7 +31,7 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
     private ArrayList<Medico> listaMedico;
     private DefaultTableModel modelo, modeloMedico;
     
-    public CadastrarConsultaUI() {
+    public CadastrarConsultaUI(Consulta consulta) {
         initComponents();
     }
 

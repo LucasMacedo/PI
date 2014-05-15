@@ -27,6 +27,8 @@ public class MedicoDao {
     
     public MedicoDao(){
         listaMedico = new ArrayList<Medico>();
+        listaMedico.add(new Medico(10, 1, "Lucas"));
+        listaMedico.add(new Medico(20, 2, "Macedo"));
     }
     
     public void incluir(Medico medico){

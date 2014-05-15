@@ -12,9 +12,15 @@ package view;
  */
 public class PrincipalUI extends javax.swing.JFrame {
 
-    /**
-     * Creates new form PrincipalUI
-     */
+    private static PrincipalUI instanciaRep;
+    
+    public static PrincipalUI obterInstancia(){
+        if(instanciaRep == null){
+            instanciaRep = new PrincipalUI();
+        }
+        return instanciaRep;
+    }
+    
     public PrincipalUI() {
         initComponents();
     }
@@ -151,19 +157,19 @@ public class PrincipalUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JMICadastroMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICadastroMedicoActionPerformed
-       CadastrarMedicoUI cadastroMedicoUI = new CadastrarMedicoUI();
+       CadastrarMedicoUI cadastroMedicoUI = new CadastrarMedicoUI(null);
        cadastroMedicoUI.setVisible(true);
        jdpTelaSecundaria.add(cadastroMedicoUI);
     }//GEN-LAST:event_JMICadastroMedicoActionPerformed
 
     private void JMICadastroPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICadastroPacienteActionPerformed
-       CadastrarPacienteUI cadastroPacienteUI =  new CadastrarPacienteUI();
+       CadastrarPacienteUI cadastroPacienteUI =  new CadastrarPacienteUI(null);
        cadastroPacienteUI.setVisible(true);
        jdpTelaSecundaria.add(cadastroPacienteUI);
     }//GEN-LAST:event_JMICadastroPacienteActionPerformed
 
     private void JMICadastroConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICadastroConsultaActionPerformed
-       CadastrarConsultaUI cadastroConsultaUI = new CadastrarConsultaUI();
+       CadastrarConsultaUI cadastroConsultaUI = new CadastrarConsultaUI(null);
        cadastroConsultaUI.setVisible(true);
        jdpTelaSecundaria.add(cadastroConsultaUI);
     }//GEN-LAST:event_JMICadastroConsultaActionPerformed

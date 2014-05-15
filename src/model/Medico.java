@@ -29,6 +29,15 @@ public class Medico extends Pessoa {
         this.codigoEspecialidade = codigoEspecialidade;
     }
 
+    public Medico(Integer crm, Integer codigoEspecialidade, String nome) {
+        super(nome);
+        this.crm = crm;
+        this.codigoEspecialidade = codigoEspecialidade;
+    }
+
+    
+    
+    
     public Medico() {
         super();
     }

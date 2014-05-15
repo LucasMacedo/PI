@@ -29,7 +29,7 @@ public class MedicoController {
         if(medico.getNome().isEmpty()){
             throw new Exception("Nome Invalido !!");
         }
-        if(medico.getCpf().isEmpty()){
+        if(medico.getCpf().equals("   .   .   -  ")){
             throw new Exception("CPF Invalido !!");
         }
         if(medico.getCrm() == null){
