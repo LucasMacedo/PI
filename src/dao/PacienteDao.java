@@ -38,5 +38,13 @@ public class PacienteDao {
     public ArrayList<Paciente> obterLista(){
         return listaPaciente;
     }
+
+    public void alterar(Paciente pacienteAnt) {
+        for(int i=0; i < this.listaPaciente.size(); i++){
+            if(this.listaPaciente.get(i).equals(pacienteAnt)){
+                this.listaPaciente.indexOf(pacienteAnt);
+            }
+        }
+    }
     
 }

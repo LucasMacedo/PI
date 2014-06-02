@@ -24,10 +24,26 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
      * Creates new form CadastrarMedico
      */
     private ArrayList<Especialidade> listaEspecialidade;
+    private Medico medicoAnt;
     
     public CadastrarMedicoUI(Medico medico) {
         initComponents();
         ComboBoxEspecialidade();
+        
+        if(medico != null){
+            medicoAnt = medico;
+            JTFNome.setText(medicoAnt.getNome());
+            JFTCpf.setText(medicoAnt.getCpf());
+            JTFCRM.setText(medicoAnt.getCrm().toString());
+            JCBEspecialidade.setSelectedIndex(medicoAnt.getCodigoEspecialidade());
+            jFTelefone.setText(medicoAnt.getTelefone());
+            JTFEndereco.setText(medicoAnt.getEndereco()); 
+            
+            JTFCRM.setEditable(false);
+            JFTCpf.setEditable(false);
+            JTFCRM.setEnabled(false);
+            JFTCpf.setEnabled(false);
+        }
     }
 
     /**
@@ -194,15 +210,24 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
 
     private void JBSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSalvarActionPerformed
         try{
-            Medico medico = new Medico();
-            medico.setNome(JTFNome.getText());
-            medico.setCpf(JFTCpf.getText());
-            medico.setCrm(Integer.parseInt(JTFCRM.getText()));
-            medico.setCodigoEspecialidade(JCBEspecialidade.getSelectedIndex());
-            medico.setTelefone(jFTelefone.getText());
-            medico.setEndereco(JTFEndereco.getText());
-            MedicoController.obterInstancia().cadastar(medico);
-            JOptionPane.showMessageDialog(null, "Cadastrado com sucesso !");
+            if(medicoAnt != null){
+                medicoAnt.setNome(JTFNome.getText());
+                medicoAnt.setCodigoEspecialidade(JCBEspecialidade.getSelectedIndex());
+                medicoAnt.setTelefone(jFTelefone.getText());
+                medicoAnt.setEndereco(JTFEndereco.getText());
+                MedicoController.obterInstancia().alterar(medicoAnt);
+                JOptionPane.showMessageDialog(null, "Editado com Sucesso");
+            }else{
+                Medico medico = new Medico();
+                medico.setNome(JTFNome.getText());
+                medico.setCpf(JFTCpf.getText());
+                medico.setCrm(Integer.parseInt(JTFCRM.getText()));
+                medico.setCodigoEspecialidade(JCBEspecialidade.getSelectedIndex());
+                medico.setTelefone(jFTelefone.getText());
+                medico.setEndereco(JTFEndereco.getText());
+                MedicoController.obterInstancia().cadastar(medico);
+                JOptionPane.showMessageDialog(null, "Cadastrado com sucesso !");
+            }
             this.dispose();
         }catch(NumberFormatException e){
             JOptionPane.showMessageDialog(null,"Erro: CRM só aceita numeros","ERRO",0);

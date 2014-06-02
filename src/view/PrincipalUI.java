@@ -6,6 +6,9 @@
 
 package view;
 
+import javax.swing.JDesktopPane;
+import javax.swing.plaf.DesktopPaneUI;
+
 /**
  *
  * @author Lucas
@@ -19,6 +22,10 @@ public class PrincipalUI extends javax.swing.JFrame {
             instanciaRep = new PrincipalUI();
         }
         return instanciaRep;
+    }
+    
+    public JDesktopPane obterTela(){
+        return obterInstancia().jdpTelaSecundaria;
     }
     
     public PrincipalUI() {
@@ -222,7 +229,7 @@ public class PrincipalUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PrincipalUI().setVisible(true);
+                obterInstancia().setVisible(true);
             }
         });
         

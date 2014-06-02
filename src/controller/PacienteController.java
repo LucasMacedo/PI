@@ -49,5 +49,22 @@ public class PacienteController {
     public ArrayList listarPaciente(){
         return PacienteDao.obterInstancia().obterLista();
     }
+
+    public void alterar(Paciente pacienteAnt) throws Exception {
+        if(pacienteAnt.getNome().isEmpty()){
+            throw new Exception("Nome esta invalido !!");
+        }
+        if(pacienteAnt.getCpf().equals("   .   .   -  ")){
+            throw new Exception("CPF esta invalido !!");
+        }
+        if(pacienteAnt.getTelefone().isEmpty()){
+            throw new Exception("Telefone invalido !!");
+        }
+        if(pacienteAnt.getEndereco().isEmpty()){
+            throw new Exception("Endereço invalido !!");
+        }
+                   
+        PacienteDao.obterInstancia().alterar(pacienteAnt);
+    }
     
 }

@@ -38,5 +38,13 @@ public class MedicoDao {
     public ArrayList<Medico> obterLista(){
         return this.listaMedico;
     }
+
+    public void alterar(Medico medicoAnt) {
+        for(int i=0 ; i< this.listaMedico.size(); i++){
+            if(this.listaMedico.get(i).equals(medicoAnt)){
+                this.listaMedico.indexOf(medicoAnt);
+            }
+        }
+    }
     
 }

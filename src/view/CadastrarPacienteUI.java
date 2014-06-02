@@ -16,11 +16,23 @@ import model.Paciente;
  */
 public class CadastrarPacienteUI extends javax.swing.JInternalFrame {
 
+    private Paciente pacienteAnt;
     /**
      * Creates new form CadastroPaciente
      */
-    public CadastrarPacienteUI(Paciente cliente) {
+    public CadastrarPacienteUI(Paciente paciente) {
         initComponents();
+        
+        if(paciente != null){
+            pacienteAnt = paciente;
+            JTFNome.setText(pacienteAnt.getNome());
+            JFTFCPF.setText(pacienteAnt.getCpf());
+            JFTFTelefone.setText(pacienteAnt.getTelefone());
+            JTFEndereco.setText(pacienteAnt.getEndereco());
+            
+            JFTFCPF.setEditable(false);
+            JFTFCPF.setEnabled(false);
+        }
     }
 
     /**
@@ -160,13 +172,21 @@ public class CadastrarPacienteUI extends javax.swing.JInternalFrame {
 
     private void JBSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSalvarActionPerformed
         try{
-            Paciente paciente = new Paciente();
-            paciente.setNome(JTFNome.getText());
-            paciente.setCpf(JFTFCPF.getText());
-            paciente.setTelefone(JFTFTelefone.getText());
-            paciente.setEndereco(JTFEndereco.getText());
-            PacienteController.obterInstancia().cadastrar(paciente);
-            JOptionPane.showMessageDialog(null,"Cadastro com Sucesso");
+            if(pacienteAnt != null){
+                pacienteAnt.setNome(JTFNome.getText());
+                pacienteAnt.setTelefone(JFTFTelefone.getText());
+                pacienteAnt.setEndereco(JTFEndereco.getText());
+                PacienteController.obterInstancia().alterar(pacienteAnt);
+                JOptionPane.showMessageDialog(null,"Editado com Sucesso");
+            }else{            
+                Paciente paciente = new Paciente();
+                paciente.setNome(JTFNome.getText());
+                paciente.setCpf(JFTFCPF.getText());
+                paciente.setTelefone(JFTFTelefone.getText());
+                paciente.setEndereco(JTFEndereco.getText());
+                PacienteController.obterInstancia().cadastrar(paciente);
+                JOptionPane.showMessageDialog(null,"Cadastro com Sucesso");
+            }
             this.dispose();
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,"Erro: "+e.getMessage(),"ERRO", 0);

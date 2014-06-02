@@ -23,9 +23,14 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
      */
     
     private ArrayList<Paciente> listaPaciente;
+    private DefaultTableModel modelo;
     
     public ConsultarPacienteUI() {
         initComponents();
+        
+        this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+        modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new String[] {"Codigo","Nome","CPF"});
     }
 
     /**
@@ -218,9 +223,6 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBListarActionPerformed
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(new String[] {"Codigo","Nome","CPF"});
-        this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
         for(int i=0; i< listaPaciente.size();i++){
             modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),this.listaPaciente.get(i).getNome(),this.listaPaciente.get(i).getCpf()});
         }
@@ -229,17 +231,28 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBListarActionPerformed
 
     private void JBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEditarActionPerformed
-        // TODO add your handling code here:
+        try{
+            for(int i=0; i < this.listaPaciente.size(); i++){
+                if(JTListaPaciente.getSelectedRow() == i){
+                    
+                    CadastrarPacienteUI cadastroPaciente =
+                            new CadastrarPacienteUI(this.listaPaciente.get(i));
+                    cadastroPaciente.setVisible(true);
+                    PrincipalUI.obterInstancia().obterTela().add(cadastroPaciente);
+                }
+            }
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
     }//GEN-LAST:event_JBEditarActionPerformed
 
     private void JBAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAdicionarActionPerformed
-
+        CadastrarPacienteUI cadastroPaciente = new CadastrarPacienteUI(null);
+        cadastroPaciente.setVisible(true);
+        PrincipalUI.obterInstancia().obterTela().add(cadastroPaciente);
     }//GEN-LAST:event_JBAdicionarActionPerformed
 
     private void JBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBPesquisarActionPerformed
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(new String[] {"Codigo","Nome","CPF"});
-        this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
         try{
             JTListaPaciente.setModel(verificarFiltros(modelo));
         }catch(Exception e){

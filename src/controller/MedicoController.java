@@ -51,6 +51,29 @@ public class MedicoController {
     public ArrayList listarMedico(){
         return MedicoDao.obterInstancia().obterLista();
     }
+
+    public void alterar(Medico medicoAnt) throws Exception {
+        if(medicoAnt.getNome().isEmpty()){
+            throw new Exception("Nome Invalido !!");
+        }
+        if(medicoAnt.getCpf().equals("   .   .   -  ")){
+            throw new Exception("CPF Invalido !!");
+        }
+        if(medicoAnt.getCrm() == null){
+            throw new Exception("CRM Invalido !!");
+        }
+        if(medicoAnt.getCodigoEspecialidade().equals(0)){
+            throw new Exception("Especialidade Invalido !!");
+        }
+        if(medicoAnt.getTelefone().isEmpty()){
+            throw new Exception("Telefone Invalido !!");
+        }
+        if(medicoAnt.getEndereco().isEmpty()){
+            throw new Exception("Endereço Invalido !!");
+        }
+        
+        MedicoDao.obterInstancia().alterar(medicoAnt);
+    }
     
     
 }

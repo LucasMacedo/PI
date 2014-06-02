@@ -134,8 +134,18 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
         });
 
         JBEditar.setText("Editar");
+        JBEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBEditarActionPerformed(evt);
+            }
+        });
 
         JBAdicionar.setText("Adicionar");
+        JBAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBAdicionarActionPerformed(evt);
+            }
+        });
 
         JBRemover.setText("Remover");
 
@@ -283,6 +293,28 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
            JOptionPane.showMessageDialog(null,"Erro: "+e.getMessage(),"ERRO",0);
        }
     }//GEN-LAST:event_JBPesquisarActionPerformed
+
+    private void JBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEditarActionPerformed
+       try{
+           for(int i=0; i < this.listaConsulta.size();i++){
+               if(JTListaConsultas.getSelectedRow() == i){
+                   
+                   CadastrarConsultaUI cadastroConsulta = 
+                           new CadastrarConsultaUI(this.listaConsulta.get(i));
+                   cadastroConsulta.setVisible(true);
+                   PrincipalUI.obterInstancia().obterTela().add(cadastroConsulta);
+               }
+           }
+       }catch(Exception ex){
+           JOptionPane.showMessageDialog(null, ex.getMessage());
+       }
+    }//GEN-LAST:event_JBEditarActionPerformed
+
+    private void JBAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAdicionarActionPerformed
+       CadastrarConsultaUI cadastroConsulta = new CadastrarConsultaUI(null);
+       cadastroConsulta.setVisible(true);
+       PrincipalUI.obterInstancia().obterTela().add(cadastroConsulta);
+    }//GEN-LAST:event_JBAdicionarActionPerformed
 
     public DefaultTableModel verificarFiltros(DefaultTableModel modelo) throws Exception{
         Integer codigo;

@@ -30,9 +30,42 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
     private ArrayList<Paciente> listaPaciente;
     private ArrayList<Medico> listaMedico;
     private DefaultTableModel modelo, modeloMedico;
+    private Consulta consultaAnt;
     
     public CadastrarConsultaUI(Consulta consulta) {
         initComponents();
+        
+        modeloMedico = new DefaultTableModel();
+        modeloMedico.setColumnIdentifiers(new String[] {"CRM","Nome"});
+        this.listaMedico = MedicoController.obterInstancia().listarMedico();
+        
+        modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new String[] {"Codigo","Nome"});
+        this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+        
+        if(consulta != null){
+            consultaAnt = consulta;
+            JFTDataConsulta.setText(consulta.getData().toString());
+            JTAProcedimento.setText(consulta.getProcedimento());
+            JTAObservacao.setText(consulta.getObservacao());
+            
+            for(int i=0; i < this.listaMedico.size();i++){
+                if(consulta.getCodMedico().equals(this.listaMedico.get(i).getCrm())){
+                     modeloMedico.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
+                                              this.listaMedico.get(i).getNome()});
+                }
+            }
+            
+            for(int y=0; y< this.listaPaciente.size();y++){
+                if(consulta.getCodPaciente().equals(this.listaPaciente.get(y).getCodigo())){
+                    modelo.addRow(new Object[] {this.listaPaciente.get(y).getCodigo(),
+                                              this.listaPaciente.get(y).getNome()});
+                }
+            }
+           
+            JTabelaMedico.setModel(modeloMedico);
+            JTabelaPaciente.setModel(modelo);
+        }
     }
 
     /**
@@ -363,9 +396,6 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBProcurarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBProcurarPacienteActionPerformed
-       modelo = new DefaultTableModel();
-       modelo.setColumnIdentifiers(new String[] {"Codigo","Nome"});
-       this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
        try{
        JTabelaPaciente.setModel(verificarPaciente(modelo));
        }catch(Exception e){
@@ -374,9 +404,6 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBProcurarPacienteActionPerformed
 
     private void JBProcurarMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBProcurarMedicoActionPerformed
-       modeloMedico = new DefaultTableModel();
-       modeloMedico.setColumnIdentifiers(new String[] {"CRM","Nome"});
-       this.listaMedico = MedicoController.obterInstancia().listarMedico();
        try{
        JTabelaMedico.setModel(verificarMedico(modeloMedico));
        }catch(Exception e){

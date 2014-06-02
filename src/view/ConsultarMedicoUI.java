@@ -27,10 +27,14 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
     
     private ArrayList<Medico> listaMedico;
     private ArrayList<Especialidade> listaEspecialidade;
+    private DefaultTableModel modelo;
     
     public ConsultarMedicoUI() {
         initComponents();
         ComboBoxEspecialidade();
+        this.listaMedico = MedicoController.obterInstancia().listarMedico();
+        modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new String[] {"CRM","Nome","Especialidade"});
     }
 
     /**
@@ -213,9 +217,7 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBPesquisarActionPerformed
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(new String[] {"CRM","Nome","Especialidade"});
-        this.listaMedico = MedicoController.obterInstancia().listarMedico();
+        
         try{
            JTListaMedico.setModel(verificarFiltros(modelo)); 
         }catch(Exception e){
@@ -224,9 +226,7 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBPesquisarActionPerformed
  
     private void JBListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBListarActionPerformed
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(new String[] {"CRM","Nome","Especialidade"});
-        this.listaMedico = MedicoController.obterInstancia().listarMedico();
+       
         for (int i=0; i< this.listaMedico.size();i++) {
             String especialidade = null;
             for(int y=0;y<this.listaEspecialidade.size();y++){
@@ -245,11 +245,26 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBListarActionPerformed
 
     private void JBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEditarActionPerformed
-        // TODO add your handling code here:
+       try{
+           for(int i=0; i < this.listaMedico.size(); i++){
+               if(JTListaMedico.getSelectedRow() == i){
+                   
+                   CadastrarMedicoUI cadastroMedico =
+                           new CadastrarMedicoUI(this.listaMedico.get(i));
+                   
+                   cadastroMedico.setVisible(true);
+                   PrincipalUI.obterInstancia().obterTela().add(cadastroMedico);
+               }
+           }
+       }catch(Exception ex){
+           JOptionPane.showMessageDialog(this, ex.getMessage());
+       }
     }//GEN-LAST:event_JBEditarActionPerformed
 
     private void JBAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAdicionarActionPerformed
-        // TODO add your handling code here:
+       CadastrarMedicoUI cadastroMedico = new CadastrarMedicoUI(null);
+       cadastroMedico.setVisible(true);
+       PrincipalUI.obterInstancia().obterTela().add(cadastroMedico);
     }//GEN-LAST:event_JBAdicionarActionPerformed
 
     private void JBRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBRemoverActionPerformed
