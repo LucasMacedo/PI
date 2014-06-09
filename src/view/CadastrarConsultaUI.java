@@ -35,17 +35,16 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
     public CadastrarConsultaUI(Consulta consulta) {
         initComponents();
         
-        modeloMedico = new DefaultTableModel();
-        modeloMedico.setColumnIdentifiers(new String[] {"CRM","Nome"});
+        this.zerarModeloMedico();
         this.listaMedico = MedicoController.obterInstancia().listarMedico();
         
-        modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(new String[] {"Codigo","Nome"});
+        this.zerarModeloPaciente();
         this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
         
         if(consulta != null){
             consultaAnt = consulta;
-            JFTDataConsulta.setText(consulta.getData().toString());
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+            JFTDataConsulta.setText(sdf.format(consulta.getData()));
             JTAProcedimento.setText(consulta.getProcedimento());
             JTAObservacao.setText(consulta.getObservacao());
             
@@ -396,6 +395,7 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBProcurarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBProcurarPacienteActionPerformed
+       this.zerarModeloPaciente();
        try{
        JTabelaPaciente.setModel(verificarPaciente(modelo));
        }catch(Exception e){
@@ -404,6 +404,7 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBProcurarPacienteActionPerformed
 
     private void JBProcurarMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBProcurarMedicoActionPerformed
+       this.zerarModeloMedico();
        try{
        JTabelaMedico.setModel(verificarMedico(modeloMedico));
        }catch(Exception e){
@@ -413,30 +414,52 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
 
     private void JBSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBSalvarActionPerformed
         try{
-            Consulta consulta = new Consulta();
-            // Obtenção das Linhas
-            int linhaMedico = JTabelaMedico.getSelectedRow();
-            int linhaPaciente = JTabelaPaciente.getSelectedRow();
-            
-           // Obtem os dados pela linha selecionada
-            try{
-                consulta.setCodMedico((int) modeloMedico.getValueAt(linhaMedico,0));
-                consulta.setCodPaciente((int) modelo.getValueAt(linhaPaciente,0));
-            }catch(Exception e){}
-            
-            
-            consulta.setProcedimento(JTAProcedimento.getText());
-            consulta.setObservacao(JTAObservacao.getText());
-           
-            try{
-                // Manipulação da Data 
-                Date data;
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/YYYY");
-                data = sdf.parse(JFTDataConsulta.getText());
-                consulta.setData(data);
-            }catch(Exception e){}
-            
-            ConsultaController.obterInstancia().cadastrar(consulta);
+            if(consultaAnt != null){
+                int linhaMedico = JTabelaMedico.getSelectedRow();
+                int linhaPaciente = JTabelaPaciente.getSelectedRow();
+                try{
+                    consultaAnt.setCodMedico((int) modeloMedico.getValueAt(linhaMedico,0));
+                    consultaAnt.setCodPaciente((int) modelo.getValueAt(linhaPaciente,0));
+                }catch(Exception e){}
+                
+                try{
+                    // Manipulação da Data 
+                    Date data;
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/YYYY");
+                    data = (Date) sdf.parse(JFTDataConsulta.getText());
+                    consultaAnt.setData(data);
+                }catch(Exception e){}
+                
+                consultaAnt.setProcedimento(JTAProcedimento.getText());
+                consultaAnt.setObservacao(JTAObservacao.getText());
+                
+                ConsultaController.obterInstancia().alterar(consultaAnt);
+                
+            }else{
+                Consulta consulta = new Consulta();
+                // Obtenção das Linhas
+                int linhaMedico = JTabelaMedico.getSelectedRow();
+                int linhaPaciente = JTabelaPaciente.getSelectedRow();
+
+               // Obtem os dados pela linha selecionada
+                try{
+                    consulta.setCodMedico((int) modeloMedico.getValueAt(linhaMedico,0));
+                    consulta.setCodPaciente((int) modelo.getValueAt(linhaPaciente,0));
+                }catch(Exception e){}
+                
+                consulta.setProcedimento(JTAProcedimento.getText());
+                consulta.setObservacao(JTAObservacao.getText());
+
+                try{
+                    // Manipulação da Data 
+                    Date data;
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/YYYY");
+                    data = sdf.parse(JFTDataConsulta.getText());
+                    consulta.setData(data);
+                }catch(Exception e){}
+
+                ConsultaController.obterInstancia().cadastrar(consulta);
+            }
             JOptionPane.showMessageDialog(null, "Cadastrado com sucesso !");
             this.dispose();            
         }catch(Exception e){
@@ -526,6 +549,16 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
        }
        
        return modelo;
+    }
+    
+    private void zerarModeloPaciente(){
+        modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new String[] {"Codigo","Nome"});
+    }
+    
+    private void zerarModeloMedico(){
+        modeloMedico = new DefaultTableModel();
+        modeloMedico.setColumnIdentifiers(new String[] {"CRM","Nome"});
     }
  
     // Variables declaration - do not modify//GEN-BEGIN:variables

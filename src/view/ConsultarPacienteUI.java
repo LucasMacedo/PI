@@ -29,8 +29,7 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
         initComponents();
         
         this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
-        modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(new String[] {"Codigo","Nome","CPF"});
+        this.zerarModelo();
     }
 
     /**
@@ -223,6 +222,7 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBListarActionPerformed
+        this.zerarModelo();
         for(int i=0; i< listaPaciente.size();i++){
             modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),this.listaPaciente.get(i).getNome(),this.listaPaciente.get(i).getCpf()});
         }
@@ -231,9 +231,12 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBListarActionPerformed
 
     private void JBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEditarActionPerformed
+        this.zerarModelo();
+        int index = JTListaPaciente.getSelectedRow();
+        int codigo = (int) JTListaPaciente.getValueAt(index,0);
         try{
             for(int i=0; i < this.listaPaciente.size(); i++){
-                if(JTListaPaciente.getSelectedRow() == i){
+                if(codigo == this.listaPaciente.get(i).getCodigo()){
                     
                     CadastrarPacienteUI cadastroPaciente =
                             new CadastrarPacienteUI(this.listaPaciente.get(i));
@@ -253,6 +256,7 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBAdicionarActionPerformed
 
     private void JBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBPesquisarActionPerformed
+        this.zerarModelo();
         try{
             JTListaPaciente.setModel(verificarFiltros(modelo));
         }catch(Exception e){
@@ -264,7 +268,8 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
         String nome = JTFNome.getText();
         String cpf = JFTFCpf.getText();
         Integer codigo;
-        
+               
+        this.verificarNome(JTFNome.getText());
         try{
             codigo = Integer.parseInt(JTFCodigo.getText());
         }catch(NumberFormatException e){
@@ -363,6 +368,18 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
        
     }
     
+    private void zerarModelo(){
+        modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new String[] {"Codigo","Nome","CPF"});
+    }
+    
+    private void verificarNome(String paciente) throws Exception{
+         for(int i=0;i<paciente.length();i++){
+                if(Character.isDigit(paciente.charAt(i))){
+                       throw new Exception("Contem numero no nome");
+                }
+          }
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBAdicionar;

@@ -31,9 +31,11 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
     private ArrayList<Consulta> listaConsulta;
     private ArrayList<Medico> listaMedico;
     private ArrayList<Paciente> listaPaciente;
+    private DefaultTableModel modelo;
     
     public ConsultarProntuarioUI() {
         initComponents();
+        this.zerarModelo();
     }
 
     /**
@@ -247,8 +249,7 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBListarActionPerformed
-       DefaultTableModel modelo = new DefaultTableModel();
-       modelo.setColumnIdentifiers(new String[] {"Codigo","Data","Médico","Paciente"});
+       this.zerarModelo();
        this.listaConsulta = ConsultaController.obterInstancia().listar();
        this.listaMedico = MedicoController.obterInstancia().listarMedico();
        this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
@@ -281,8 +282,7 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBListarActionPerformed
 
     private void JBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBPesquisarActionPerformed
-       DefaultTableModel modelo = new DefaultTableModel();
-       modelo.setColumnIdentifiers(new String[] {"Codigo","Data","Medico","Paciente"});
+       this.zerarModelo();
        this.listaConsulta = ConsultaController.obterInstancia().listar();
        this.listaMedico = MedicoController.obterInstancia().listarMedico();
        this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
@@ -323,6 +323,8 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
         Date dataIni = null,dataFim = null;
         SimpleDateFormat sdp = new SimpleDateFormat("dd/mm/yyyy");
         
+        this.verificarNome(medico, 1);
+        this.verificarNome(paciente, 2);
         try{
             dataIni = sdp.parse(JFTFDataInicio.getText());
             dataFim = sdp.parse(JFTFDataFim.getText());
@@ -447,6 +449,25 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
             throw new Exception("Nenhum dado cadastrado");
         }
         
+    }
+    
+    private void zerarModelo(){
+       modelo = new DefaultTableModel();
+       modelo.setColumnIdentifiers(new String[] {"Codigo","Data","Medico","Paciente"});
+    }
+    
+    private void verificarNome(String nome, Integer tipo) throws Exception{
+         for(int i=0;i<nome.length();i++){
+                if(Character.isDigit(nome.charAt(i))){
+                    if(tipo == 1){  
+                        throw new Exception("Contem numero no nome medico");
+                    }else
+                    if(tipo == 2){
+                        throw new Exception("Contem numero no nome paciente");
+                    }    
+                    
+                }
+          }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

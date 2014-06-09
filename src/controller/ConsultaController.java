@@ -41,7 +41,7 @@ public class ConsultaController {
         if(consulta.getProcedimento().isEmpty()){
             throw new Exception("Procedimento esta invalido !");
         }
-        if(consulta.getData() == null){
+        if(consulta.getData().equals("  /  /   ")){
             throw new Exception("A data esta invalida !");
         }
         
@@ -50,5 +50,25 @@ public class ConsultaController {
     
     public ArrayList listar(){
         return ConsultaDao.obterInstancia().listar();
+    }
+
+    public void alterar(Consulta consultaAnt) throws Exception {
+        if(consultaAnt.getCodMedico() == null){
+            throw new Exception("Medico não foi selecionado !");
+        }
+        if(consultaAnt.getCodPaciente() == null){
+            throw new Exception("Paciente não foi selecionado !");
+        }
+        if(consultaAnt.getObservacao().isEmpty()){
+            throw new Exception("Observação esta invalido !");
+        }
+        if(consultaAnt.getProcedimento().isEmpty()){
+            throw new Exception("Procedimento esta invalido !");
+        }
+        if(consultaAnt.getData().equals("  /  /   ")){
+            throw new Exception("A data esta invalida !");
+        }
+        
+        ConsultaDao.obterInstancia().alterar(consultaAnt);
     }
 }

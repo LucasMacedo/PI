@@ -34,6 +34,14 @@ public class ConsultaDao {
     public ArrayList listar(){
         return this.listaConsulta;
     }
+
+    public void alterar(Consulta consultaAnt) {
+        for(int i=0;i<this.listaConsulta.size();i++){
+            if(this.listaConsulta.get(i).equals(consultaAnt)){
+                this.listaConsulta.indexOf(consultaAnt);
+            }
+        }
+    }
     
     
 }
