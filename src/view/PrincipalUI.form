@@ -16,9 +16,6 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="JMICadastroMedico">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="F1"/>
-                </Property>
                 <Property name="text" type="java.lang.String" value="M&#xe9;dico"/>
               </Properties>
               <Events>
@@ -27,9 +24,6 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="JMICadastroPaciente">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="F2"/>
-                </Property>
                 <Property name="text" type="java.lang.String" value="Paciente"/>
               </Properties>
               <Events>
@@ -38,9 +32,6 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="JMICadastroConsulta">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="F3"/>
-                </Property>
                 <Property name="text" type="java.lang.String" value="Consulta"/>
               </Properties>
               <Events>
@@ -56,9 +47,6 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="JMIConsultaMedico">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="F4"/>
-                </Property>
                 <Property name="text" type="java.lang.String" value="M&#xe9;dicos"/>
               </Properties>
               <Events>
@@ -67,9 +55,6 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="JMIConsultaPaciente">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="F5"/>
-                </Property>
                 <Property name="text" type="java.lang.String" value="Paciente"/>
               </Properties>
               <Events>
@@ -78,9 +63,6 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="JMIConsultaConsulta">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="F6"/>
-                </Property>
                 <Property name="text" type="java.lang.String" value="Consultas"/>
               </Properties>
               <Events>
@@ -94,16 +76,20 @@
             <Property name="text" type="java.lang.String" value="Relatorios"/>
           </Properties>
           <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="JMIRelatorioMedico">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Medico"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="JMIRelatorioPaciente">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Paciente"/>
+              </Properties>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="JMIRelatorioConsulta">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="F7"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Consulta por Paciente"/>
+                <Property name="text" type="java.lang.String" value="Consulta"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JMIRelatorioConsultaActionPerformed"/>
-              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -153,7 +139,7 @@
     <Container class="javax.swing.JDesktopPane" name="jdpTelaSecundaria">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="0" type="rgb"/>
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
       </Properties>
 
