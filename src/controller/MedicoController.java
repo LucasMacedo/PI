@@ -8,6 +8,7 @@ package controller;
 
 import dao.MedicoDao;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import model.Medico;
 
 /**
@@ -17,6 +18,7 @@ import model.Medico;
 public class MedicoController {
     
     private static MedicoController instanciaRep;
+    
     
     public static MedicoController obterInstancia(){
         if(instanciaRep == null){
@@ -28,6 +30,8 @@ public class MedicoController {
     public void cadastar(Medico medico) throws Exception{
         if(medico.getNome().isEmpty()){
             throw new Exception("Nome Invalido !!");
+        }else{
+           this.verificarNome(medico.getNome());
         }
         if(medico.getCpf().equals("   .   .   -  ")){
             throw new Exception("CPF Invalido !!");
@@ -35,6 +39,7 @@ public class MedicoController {
         if(medico.getCrm() == null){
             throw new Exception("CRM Invalido !!");
         }
+        
         if(medico.getCodigoEspecialidade().equals(0)){
             throw new Exception("Especialidade Invalido !!");
         }
@@ -55,6 +60,8 @@ public class MedicoController {
     public void alterar(Medico medicoAnt) throws Exception {
         if(medicoAnt.getNome().isEmpty()){
             throw new Exception("Nome Invalido !!");
+        }else{
+            this.verificarNome(medicoAnt.getNome());
         }
         if(medicoAnt.getCpf().equals("   .   .   -  ")){
             throw new Exception("CPF Invalido !!");
@@ -75,5 +82,14 @@ public class MedicoController {
         MedicoDao.obterInstancia().alterar(medicoAnt);
     }
     
+    private void verificarNome(String medico) throws Exception{
+         for(int i=0;i<medico.length();i++){
+                if(Character.isDigit(medico.charAt(i))){
+                     throw new Exception("Contem numero no nome");
+                }
+          }
+    }
+
+   
     
 }

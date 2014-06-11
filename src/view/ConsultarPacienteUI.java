@@ -29,8 +29,7 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
         initComponents();
         
         this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
-        modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(new String[] {"Codigo","Nome","CPF"});
+        this.zerarModelo();
     }
 
     /**
@@ -223,6 +222,7 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBListarActionPerformed
+        this.zerarModelo();
         for(int i=0; i< listaPaciente.size();i++){
             modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),this.listaPaciente.get(i).getNome(),this.listaPaciente.get(i).getCpf()});
         }
@@ -231,32 +231,43 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBListarActionPerformed
 
     private void JBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEditarActionPerformed
+        this.zerarModelo();
+        int codigo;      
         try{
-            for(int i=0; i < this.listaPaciente.size(); i++){
-                if(JTListaPaciente.getSelectedRow() == i){
-                    
-                    CadastrarPacienteUI cadastroPaciente =
-                            new CadastrarPacienteUI(this.listaPaciente.get(i));
-                    cadastroPaciente.setVisible(true);
-                    PrincipalUI.obterInstancia().obterTela().add(cadastroPaciente);
-                }
+            int index = JTListaPaciente.getSelectedRow();
+            if(index >= 0){
+                codigo = (int) JTListaPaciente.getValueAt(index,0);
+            }else{
+                throw new Exception("Nenhum paciente foi selecionado");
             }
-        }catch(Exception ex){
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
+             for(int i=0; i < this.listaPaciente.size(); i++){
+                 if(codigo == this.listaPaciente.get(i).getCodigo()){
+
+                     CadastrarPacienteUI cadastroPaciente =
+                                new CadastrarPacienteUI(this.listaPaciente.get(i));
+                     cadastroPaciente.setVisible(true);
+                     PrincipalUI.obterInstancia().obterTela().add(cadastroPaciente);
+                     cadastroPaciente.toFront();
+                 }
+            }
+         }catch(Exception ex){
+             JOptionPane.showMessageDialog(this, ex.getMessage());
+         }     
     }//GEN-LAST:event_JBEditarActionPerformed
 
     private void JBAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAdicionarActionPerformed
         CadastrarPacienteUI cadastroPaciente = new CadastrarPacienteUI(null);
         cadastroPaciente.setVisible(true);
         PrincipalUI.obterInstancia().obterTela().add(cadastroPaciente);
+        cadastroPaciente.toFront();
     }//GEN-LAST:event_JBAdicionarActionPerformed
 
     private void JBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBPesquisarActionPerformed
+        this.zerarModelo();
         try{
             JTListaPaciente.setModel(verificarFiltros(modelo));
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null,"Erro: "+e.getMessage(),"ERRO",0);
+            JOptionPane.showMessageDialog(this,"Erro: "+e.getMessage(),"ERRO",0);
         }
     }//GEN-LAST:event_JBPesquisarActionPerformed
 
@@ -264,7 +275,8 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
         String nome = JTFNome.getText();
         String cpf = JFTFCpf.getText();
         Integer codigo;
-        
+               
+        this.verificarNome(JTFNome.getText());
         try{
             codigo = Integer.parseInt(JTFCodigo.getText());
         }catch(NumberFormatException e){
@@ -363,6 +375,18 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
        
     }
     
+    private void zerarModelo(){
+        modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new String[] {"Codigo","Nome","CPF"});
+    }
+    
+    private void verificarNome(String paciente) throws Exception{
+         for(int i=0;i<paciente.length();i++){
+                if(Character.isDigit(paciente.charAt(i))){
+                       throw new Exception("Contem numero no nome");
+                }
+          }
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBAdicionar;

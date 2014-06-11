@@ -177,7 +177,7 @@ public class CadastrarPacienteUI extends javax.swing.JInternalFrame {
                 pacienteAnt.setTelefone(JFTFTelefone.getText());
                 pacienteAnt.setEndereco(JTFEndereco.getText());
                 PacienteController.obterInstancia().alterar(pacienteAnt);
-                JOptionPane.showMessageDialog(null,"Editado com Sucesso");
+                JOptionPane.showMessageDialog(this,"Editado com Sucesso");
             }else{            
                 Paciente paciente = new Paciente();
                 paciente.setNome(JTFNome.getText());
@@ -185,7 +185,7 @@ public class CadastrarPacienteUI extends javax.swing.JInternalFrame {
                 paciente.setTelefone(JFTFTelefone.getText());
                 paciente.setEndereco(JTFEndereco.getText());
                 PacienteController.obterInstancia().cadastrar(paciente);
-                JOptionPane.showMessageDialog(null,"Cadastro com Sucesso");
+                JOptionPane.showMessageDialog(this,"Cadastro com Sucesso");
             }
             this.dispose();
         }catch(Exception e){

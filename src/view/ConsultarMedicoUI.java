@@ -33,8 +33,7 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
         initComponents();
         ComboBoxEspecialidade();
         this.listaMedico = MedicoController.obterInstancia().listarMedico();
-        modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(new String[] {"CRM","Nome","Especialidade"});
+        this.zerarModelo();
     }
 
     /**
@@ -62,6 +61,9 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
         JBRemover = new javax.swing.JButton();
 
         setClosable(true);
+        setForeground(java.awt.Color.white);
+        setMaximumSize(new java.awt.Dimension(2000, 2000));
+        setVisible(true);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Consulta de Medicos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
@@ -217,16 +219,16 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBPesquisarActionPerformed
-        
+        this.zerarModelo();
         try{
            JTListaMedico.setModel(verificarFiltros(modelo)); 
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "Erro: "+e.getMessage(),"ERRO", 0);
+            JOptionPane.showMessageDialog(this, "Erro: "+e.getMessage(),"ERRO", 0);
         }
     }//GEN-LAST:event_JBPesquisarActionPerformed
  
     private void JBListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBListarActionPerformed
-       
+        this.zerarModelo();
         for (int i=0; i< this.listaMedico.size();i++) {
             String especialidade = null;
             for(int y=0;y<this.listaEspecialidade.size();y++){
@@ -245,15 +247,24 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBListarActionPerformed
 
     private void JBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEditarActionPerformed
+       this.zerarModelo();
+       int crm;
        try{
+           int linha = JTListaMedico.getSelectedRow();
+           if( linha >= 0){
+                 crm = (int) JTListaMedico.getValueAt(linha,0);
+           }else{
+               throw new Exception("Nenhum medico foi selecionado");
+           }
            for(int i=0; i < this.listaMedico.size(); i++){
-               if(JTListaMedico.getSelectedRow() == i){
+               if( crm == this.listaMedico.get(i).getCrm()){
                    
                    CadastrarMedicoUI cadastroMedico =
                            new CadastrarMedicoUI(this.listaMedico.get(i));
                    
                    cadastroMedico.setVisible(true);
                    PrincipalUI.obterInstancia().obterTela().add(cadastroMedico);
+                   cadastroMedico.toFront();
                }
            }
        }catch(Exception ex){
@@ -265,6 +276,7 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
        CadastrarMedicoUI cadastroMedico = new CadastrarMedicoUI(null);
        cadastroMedico.setVisible(true);
        PrincipalUI.obterInstancia().obterTela().add(cadastroMedico);
+       cadastroMedico.toFront();
     }//GEN-LAST:event_JBAdicionarActionPerformed
 
     private void JBRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBRemoverActionPerformed
@@ -286,6 +298,7 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
         String nomeEsp = null; // Armazena o nome da especialidade 
         Integer crm;  // Recebe o crm escrito no filtro
         
+        this.verificarNome(JTFNome.getText());
         // Transforma o CRM em numero
           try{
               crm  = Integer.parseInt(JTFCrm.getText());
@@ -387,6 +400,18 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
         }
     }
     
+    private void zerarModelo(){
+        modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new String[] {"CRM","Nome","Especialidade"});
+    }
+    
+    private void verificarNome(String nome) throws Exception{
+         for(int i=0;i<nome.length();i++){
+                if(Character.isDigit(nome.charAt(i))){
+                       throw new Exception("Contem numero no nome");
+                }
+          }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBAdicionar;
