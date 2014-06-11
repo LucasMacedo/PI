@@ -216,7 +216,7 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
                 medicoAnt.setTelefone(jFTelefone.getText());
                 medicoAnt.setEndereco(JTFEndereco.getText());
                 MedicoController.obterInstancia().alterar(medicoAnt);
-                JOptionPane.showMessageDialog(null, "Editado com Sucesso");
+                JOptionPane.showMessageDialog(this, "Editado com Sucesso");
             }else{
                 Medico medico = new Medico();
                 medico.setNome(JTFNome.getText());
@@ -226,13 +226,13 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
                 medico.setTelefone(jFTelefone.getText());
                 medico.setEndereco(JTFEndereco.getText());
                 MedicoController.obterInstancia().cadastar(medico);
-                JOptionPane.showMessageDialog(null, "Cadastrado com sucesso !");
+                JOptionPane.showMessageDialog(this, "Cadastrado com sucesso !");
             }
             this.dispose();
         }catch(NumberFormatException e){
-            JOptionPane.showMessageDialog(null,"Erro: CRM só aceita numeros","ERRO",0);
+            JOptionPane.showMessageDialog(this,"Erro: CRM só aceita numeros","ERRO",0);
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null,"Erro: "+e.getMessage(),"ERRO",0);
+            JOptionPane.showMessageDialog(this,"Erro: "+e.getMessage(),"ERRO",0);
         }
     }//GEN-LAST:event_JBSalvarActionPerformed
 

@@ -61,6 +61,7 @@ public class PrincipalUI extends javax.swing.JFrame {
         jMenuItem5.setText("jMenuItem5");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setExtendedState(MAXIMIZED_BOTH);
 
         jdpTelaSecundaria.setBackground(new java.awt.Color(255, 255, 255));
 

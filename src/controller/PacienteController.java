@@ -31,6 +31,8 @@ public class PacienteController {
     public void cadastrar(Paciente paciente) throws Exception{
         if(paciente.getNome().isEmpty()){
             throw new Exception("Nome esta invalido !!");
+        }else{
+            this.verificaNome(paciente.getNome());
         }
         if(paciente.getCpf().equals("   .   .   -  ")){
             throw new Exception("CPF esta invalido !!");
@@ -53,6 +55,8 @@ public class PacienteController {
     public void alterar(Paciente pacienteAnt) throws Exception {
         if(pacienteAnt.getNome().isEmpty()){
             throw new Exception("Nome esta invalido !!");
+        }else{
+            this.verificaNome(pacienteAnt.getNome());
         }
         if(pacienteAnt.getCpf().equals("   .   .   -  ")){
             throw new Exception("CPF esta invalido !!");
@@ -67,4 +71,11 @@ public class PacienteController {
         PacienteDao.obterInstancia().alterar(pacienteAnt);
     }
     
+    private void verificaNome(String paciente)  throws Exception{
+        for(int i=0; i<paciente.length();i++){
+              if(Character.isDigit(paciente.charAt(i))){
+                   throw new Exception("Contem numero no nome");
+              }
+         }
+    }
 }
