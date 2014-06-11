@@ -1,4 +1,4 @@
-/*
+﻿/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -239,6 +239,18 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
                 codigo = (int) JTListaPaciente.getValueAt(index,0);
             }else{
                 throw new Exception("Nenhum paciente foi selecionado");
+
+        int index = JTListaPaciente.getSelectedRow();
+        try{
+            for(int i=0; i < this.listaPaciente.size(); i++){
+                if(codigo == this.listaPaciente.get(i).getCodigo()){
+                    
+                    CadastrarPacienteUI cadastroPaciente =
+                            new CadastrarPacienteUI(this.listaPaciente.get(i));
+                    cadastroPaciente.setVisible(true);
+                    PrincipalUI.obterInstancia().obterTela().add(cadastroPaciente);
+                }
+
             }
              for(int i=0; i < this.listaPaciente.size(); i++){
                  if(codigo == this.listaPaciente.get(i).getCodigo()){

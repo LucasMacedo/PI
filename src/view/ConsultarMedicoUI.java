@@ -1,4 +1,4 @@
-/*
+﻿/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -248,7 +248,8 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
 
     private void JBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEditarActionPerformed
        this.zerarModelo();
-       int crm;
+       int linha = JTListaMedico.getSelectedRow();
+       int crm = (int) JTListaMedico.getValueAt(linha,0);
        try{
            int linha = JTListaMedico.getSelectedRow();
            if( linha >= 0){

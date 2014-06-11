@@ -1,4 +1,4 @@
-/*
+﻿/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -453,14 +453,23 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
                 try{
                     // Manipulação da Data 
                     Date data;
+<<<<<<< HEAD
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
                     data = (Date) sdf.parse(JFTDataConsulta.getText());
+=======
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/YYYY");
+                    data = sdf.parse(JFTDataConsulta.getText());
+>>>>>>> 6ba91da38c45a632263440ede8ec1ed4c79f417c
                     consulta.setData(data);
                 }catch(Exception e){}
 
                 ConsultaController.obterInstancia().cadastrar(consulta);
             }
+<<<<<<< HEAD
             JOptionPane.showMessageDialog(this, "Cadastrado com sucesso !");
+=======
+            JOptionPane.showMessageDialog(null, "Cadastrado com sucesso !");
+>>>>>>> 6ba91da38c45a632263440ede8ec1ed4c79f417c
             this.dispose();            
         }catch(Exception e){
            JOptionPane.showMessageDialog(this, "Erro: "+e.getMessage(),"ERRO",0);
