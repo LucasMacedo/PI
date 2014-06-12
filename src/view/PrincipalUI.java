@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 
-package main;
+package view;
+
+import javax.swing.JDesktopPane;
+import javax.swing.plaf.DesktopPaneUI;
 
 /**
  *
@@ -12,9 +15,19 @@ package main;
  */
 public class PrincipalUI extends javax.swing.JFrame {
 
-    /**
-     * Creates new form PrincipalUI
-     */
+    private static PrincipalUI instanciaRep;
+    
+    public static PrincipalUI obterInstancia(){
+        if(instanciaRep == null){
+            instanciaRep = new PrincipalUI();
+        }
+        return instanciaRep;
+    }
+    
+    public JDesktopPane obterTela(){
+        return obterInstancia().jdpTelaSecundaria;
+    }
+    
     public PrincipalUI() {
         initComponents();
     }
@@ -48,7 +61,7 @@ public class PrincipalUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
 
-        jdpTelaSecundaria.setBackground(new java.awt.Color(0, 0, 0));
+        jdpTelaSecundaria.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jdpTelaSecundariaLayout = new javax.swing.GroupLayout(jdpTelaSecundaria);
         jdpTelaSecundaria.setLayout(jdpTelaSecundariaLayout);
@@ -156,47 +169,54 @@ public class PrincipalUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JMICadastroMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICadastroMedicoActionPerformed
-       CadastrarMedicoUI cadastroMedicoUI = new CadastrarMedicoUI();
+       CadastrarMedicoUI cadastroMedicoUI = new CadastrarMedicoUI(null);
        cadastroMedicoUI.setVisible(true);
        jdpTelaSecundaria.add(cadastroMedicoUI);
+       cadastroMedicoUI.toFront();
     }//GEN-LAST:event_JMICadastroMedicoActionPerformed
 
     private void JMICadastroPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICadastroPacienteActionPerformed
-       CadastrarPacienteUI cadastroPacienteUI =  new CadastrarPacienteUI();
+       CadastrarPacienteUI cadastroPacienteUI =  new CadastrarPacienteUI(null);
        cadastroPacienteUI.setVisible(true);
        jdpTelaSecundaria.add(cadastroPacienteUI);
+       cadastroPacienteUI.toFront();
     }//GEN-LAST:event_JMICadastroPacienteActionPerformed
 
     private void JMICadastroConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICadastroConsultaActionPerformed
-       CadastrarConsultaUI cadastroConsultaUI = new CadastrarConsultaUI();
+       CadastrarConsultaUI cadastroConsultaUI = new CadastrarConsultaUI(null);
        cadastroConsultaUI.setVisible(true);
        jdpTelaSecundaria.add(cadastroConsultaUI);
+       cadastroConsultaUI.toFront();
     }//GEN-LAST:event_JMICadastroConsultaActionPerformed
 
     private void JMIConsultaMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIConsultaMedicoActionPerformed
        ConsultarMedicoUI consultarMedico = new ConsultarMedicoUI();
        consultarMedico.setVisible(true);
        jdpTelaSecundaria.add(consultarMedico);
+       consultarMedico.toFront();
     }//GEN-LAST:event_JMIConsultaMedicoActionPerformed
 
     private void JMIConsultaPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIConsultaPacienteActionPerformed
        ConsultarPacienteUI consultarPaciente = new ConsultarPacienteUI();
        consultarPaciente.setVisible(true);
        jdpTelaSecundaria.add(consultarPaciente);
+       consultarPaciente.toFront();
     }//GEN-LAST:event_JMIConsultaPacienteActionPerformed
 
     private void JMIConsultaConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIConsultaConsultaActionPerformed
        ConsultarProntuarioUI consultarProntuario = new ConsultarProntuarioUI();
        consultarProntuario.setVisible(true);
        jdpTelaSecundaria.add(consultarProntuario);
+       consultarProntuario.toFront();
     }//GEN-LAST:event_JMIConsultaConsultaActionPerformed
 
     private void JMIRelatorioConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIRelatorioConsultaActionPerformed
-         RelatorioUI relatorio = new RelatorioUI();
-         relatorio.setVisible(true);
-         jdpTelaSecundaria.add(relatorio);
+       RelatorioPacienteUI relatorioPaciente = new RelatorioPacienteUI();
+       relatorioPaciente.setVisible(true);
+       jdpTelaSecundaria.add(relatorioPaciente);
+       relatorioPaciente.toFront();
     }//GEN-LAST:event_JMIRelatorioConsultaActionPerformed
-         
+
     /**
      * @param args the command line arguments
      */
@@ -227,7 +247,7 @@ public class PrincipalUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PrincipalUI().setVisible(true);
+                obterInstancia().setVisible(true);
             }
         });
         

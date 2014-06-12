@@ -4,8 +4,13 @@
  * and open the template in the editor.
  */
 
-package main;
+package view;
 
+import controller.PacienteController;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Paciente;
 
 /**
  *
@@ -17,10 +22,14 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
      * Creates new form ConsultarPaciente2
      */
     
- 
+    private ArrayList<Paciente> listaPaciente;
+    private DefaultTableModel modelo;
     
     public ConsultarPacienteUI() {
         initComponents();
+        
+        this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+        this.zerarModelo();
     }
 
     /**
@@ -39,13 +48,13 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
         JTFNome = new javax.swing.JTextField();
         JLCpf = new javax.swing.JLabel();
         JFTFCpf = new javax.swing.JFormattedTextField();
+        JBPesquisar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         JTListaPaciente = new javax.swing.JTable();
         JBListar = new javax.swing.JButton();
         JBEditar = new javax.swing.JButton();
         JBAdicionar = new javax.swing.JButton();
         JBRemover = new javax.swing.JButton();
-        JBPesquisar = new javax.swing.JButton();
 
         setClosable(true);
 
@@ -63,6 +72,13 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
             ex.printStackTrace();
         }
 
+        JBPesquisar.setText("Pesquisar");
+        JBPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBPesquisarActionPerformed(evt);
+            }
+        });
+
         JTListaPaciente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -71,25 +87,26 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
                 {null, null, null}
             },
             new String [] {
-                "Código", "Nome", "CPF"
+                "Codigo", "Nome", "CPF"
             }
         ) {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
         JTListaPaciente.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(JTListaPaciente);
-        JTListaPaciente.getColumnModel().getColumn(0).setMinWidth(70);
-        JTListaPaciente.getColumnModel().getColumn(0).setMaxWidth(170);
-        JTListaPaciente.getColumnModel().getColumn(1).setMinWidth(250);
-        JTListaPaciente.getColumnModel().getColumn(1).setMaxWidth(350);
-        JTListaPaciente.getColumnModel().getColumn(2).setMinWidth(100);
-        JTListaPaciente.getColumnModel().getColumn(2).setMaxWidth(200);
 
         JBListar.setText("Listar");
         JBListar.addActionListener(new java.awt.event.ActionListener() {
@@ -114,8 +131,6 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
 
         JBRemover.setText("Remover");
 
-        JBPesquisar.setText("Pesquisar");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -124,36 +139,38 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(JLCodigo)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(JLNome)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(JTFCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(JLCpf)
+                                .addGap(18, 18, 18)
+                                .addComponent(JFTFCpf)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(JTFCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(28, 28, 28)
-                                .addComponent(JLCpf)
+                                .addGap(13, 13, 13)
+                                .addComponent(JLNome)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(JFTFCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(JBPesquisar))
-                            .addComponent(JTFNome, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(JBListar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(JBEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(JBAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(JBRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                                .addComponent(JTFNome, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                                .addGap(118, 118, 118))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(77, 77, 77)
+                                .addComponent(JBPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(JBListar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(JBEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(JBAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(JBRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,16 +178,16 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JTFNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JLNome))
+                    .addComponent(JLNome)
+                    .addComponent(JLCodigo)
+                    .addComponent(JTFCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(13, 13, 13)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JLCpf)
-                    .addComponent(JFTFCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JTFCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JLCodigo)
-                    .addComponent(JBPesquisar))
+                    .addComponent(JBPesquisar)
+                    .addComponent(JFTFCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JBEditar)
@@ -184,35 +201,193 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(2, 2, 2)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(2, 2, 2))
+            .addGap(0, 473, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(2, 2, 2)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(2, 2, 2)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+            .addGap(0, 468, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(15, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBListarActionPerformed
-                   
+        this.zerarModelo();
+        for(int i=0; i< listaPaciente.size();i++){
+            modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),this.listaPaciente.get(i).getNome(),this.listaPaciente.get(i).getCpf()});
+        }
+        
+        JTListaPaciente.setModel(modelo);                
     }//GEN-LAST:event_JBListarActionPerformed
 
     private void JBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEditarActionPerformed
-        // TODO add your handling code here:
+        this.zerarModelo();
+        int codigo;      
+        try{
+            int index = JTListaPaciente.getSelectedRow();
+            if(index >= 0){
+                codigo = (int) JTListaPaciente.getValueAt(index,0);
+            }else{
+                throw new Exception("Nenhum paciente foi selecionado");
+            }
+             for(int i=0; i < this.listaPaciente.size(); i++){
+                 if(codigo == this.listaPaciente.get(i).getCodigo()){
+
+                     CadastrarPacienteUI cadastroPaciente =
+                                new CadastrarPacienteUI(this.listaPaciente.get(i));
+                     cadastroPaciente.setVisible(true);
+                     PrincipalUI.obterInstancia().obterTela().add(cadastroPaciente);
+                     cadastroPaciente.toFront();
+                 }
+            }
+         }catch(Exception ex){
+             JOptionPane.showMessageDialog(this, ex.getMessage());
+         }     
     }//GEN-LAST:event_JBEditarActionPerformed
 
     private void JBAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAdicionarActionPerformed
-
+        CadastrarPacienteUI cadastroPaciente = new CadastrarPacienteUI(null);
+        cadastroPaciente.setVisible(true);
+        PrincipalUI.obterInstancia().obterTela().add(cadastroPaciente);
+        cadastroPaciente.toFront();
     }//GEN-LAST:event_JBAdicionarActionPerformed
 
+    private void JBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBPesquisarActionPerformed
+        this.zerarModelo();
+        try{
+            JTListaPaciente.setModel(verificarFiltros(modelo));
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this,"Erro: "+e.getMessage(),"ERRO",0);
+        }
+    }//GEN-LAST:event_JBPesquisarActionPerformed
 
+    public DefaultTableModel verificarFiltros(DefaultTableModel modelo) throws Exception{
+        String nome = JTFNome.getText();
+        String cpf = JFTFCpf.getText();
+        Integer codigo;
+               
+        this.verificarNome(JTFNome.getText());
+        try{
+            codigo = Integer.parseInt(JTFCodigo.getText());
+        }catch(NumberFormatException e){
+            codigo = null;
+        }
+        
+        if(cpf.equals("   .   .   -  ")){
+            cpf = null;
+        }
+        
+        for(int i=0;i< this.listaPaciente.size();i++){
+            if(codigo != null && !nome.isEmpty() && cpf != null){
+                
+                if(this.listaPaciente.get(i).getCodigo().equals(codigo)&&
+                        this.listaPaciente.get(i).getNome().equals(nome) &&
+                            this.listaPaciente.get(i).getCpf().equals(cpf)){
+                    modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                                 this.listaPaciente.get(i).getNome(),
+                                                 this.listaPaciente.get(i).getCpf()});
+                }else
+                if(this.listaPaciente.get(i).getCodigo().equals(codigo) &&
+                        !this.listaPaciente.get(i).getNome().equals(nome)){
+                    if(this.listaPaciente.get(i).getCpf().equals(cpf)){
+                        throw new Exception("Dados Incorretos !! O nome esta Incorreto");
+                    }else
+                    if(!this.listaPaciente.get(i).getCpf().equals(cpf)){
+                        throw new Exception("Dados Incorretos !! O nome e o cpf esta Incorretos");
+                    }
+                }
+                
+            }else
+            if(codigo == null && !nome.isEmpty() && cpf != null){
+                if(this.listaPaciente.get(i).getNome().equals(nome)&&
+                        this.listaPaciente.get(i).getCpf().equals(cpf)){
+                    
+                    modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                                 this.listaPaciente.get(i).getNome(),
+                                                 this.listaPaciente.get(i).getCpf()}); 
+                }else
+                if(this.listaPaciente.get(i).getNome().equals(nome) &&
+                        !this.listaPaciente.get(i).getCpf().equals(cpf)){
+                    throw new Exception("Dados Incorretos !! Nome e CPF não conferem");
+                }
+                
+            }else
+            if(codigo != null && !nome.isEmpty() && cpf == null){
+                
+                if(this.listaPaciente.get(i).getCodigo().equals(codigo) &&
+                        this.listaPaciente.get(i).getNome().equals(nome)){
+                   
+                    modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                                this.listaPaciente.get(i).getNome(),
+                                                this.listaPaciente.get(i).getCpf()});
+                }else
+                if(this.listaPaciente.get(i).getCodigo().equals(codigo) &&
+                        !this.listaPaciente.get(i).getNome().equals(nome)){
+                    throw new Exception("Dados Incorretos !! Codigo e Nome não conferem");
+                }
+                
+            }else
+            if(codigo != null && nome.isEmpty() && cpf == null){ // Verifica pelo Codigo
+                if(this.listaPaciente.get(i).getCodigo().equals(codigo)){
+                    modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                                 this.listaPaciente.get(i).getNome(),
+                                                 this.listaPaciente.get(i).getCpf()});
+                }
+            }else
+            if(codigo == null && !nome.isEmpty() && cpf == null){ // Verifica pelo nome
+                if(this.listaPaciente.get(i).getNome().contains(nome)){
+                    modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                                this.listaPaciente.get(i).getNome(),
+                                                this.listaPaciente.get(i).getCpf()});
+                }
+            }else
+            if(codigo == null && nome.isEmpty() && cpf != null){ // Verifica pelo CPF
+                if(this.listaPaciente.get(i).getCpf().equals(cpf)){
+                    modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                                this.listaPaciente.get(i).getNome(),
+                                                this.listaPaciente.get(i).getCpf()});
+                }
+            }else
+            if(codigo == null && nome.isEmpty() && cpf == null){ // Verifica se todos esta nulos
+                modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                            this.listaPaciente.get(i).getNome(),
+                                            this.listaPaciente.get(i).getCpf()});
+            }
+            
+        }
+        
+        if(modelo.getRowCount() != 0){
+             return modelo;
+        } else {
+            throw new Exception("Nenhum dado cadastrado");
+        }
+        
+       
+    }
+    
+    private void zerarModelo(){
+        modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new String[] {"Codigo","Nome","CPF"});
+    }
+    
+    private void verificarNome(String paciente) throws Exception{
+         for(int i=0;i<paciente.length();i++){
+                if(Character.isDigit(paciente.charAt(i))){
+                       throw new Exception("Contem numero no nome");
+                }
+          }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBAdicionar;
     private javax.swing.JButton JBEditar;

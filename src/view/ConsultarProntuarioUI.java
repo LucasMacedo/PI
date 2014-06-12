@@ -1,13 +1,22 @@
-
-
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-package main;
+package view;
+
+import controller.ConsultaController;
+import controller.MedicoController;
+import controller.PacienteController;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Consulta;
+import model.Medico;
+import model.Paciente;
 
 /**
  *
@@ -18,8 +27,15 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
     /**
      * Creates new form ConsultarProntuario
      */
+    
+    private ArrayList<Consulta> listaConsulta;
+    private ArrayList<Medico> listaMedico;
+    private ArrayList<Paciente> listaPaciente;
+    private DefaultTableModel modelo;
+    
     public ConsultarProntuarioUI() {
-        initComponents();       
+        initComponents();
+        this.zerarModelo();
     }
 
     /**
@@ -32,33 +48,42 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        JLCodigo = new javax.swing.JLabel();
+        JTFCodigo = new javax.swing.JTextField();
+        JLMedico = new javax.swing.JLabel();
+        JTFMedico = new javax.swing.JTextField();
+        JLPaciente = new javax.swing.JLabel();
+        JTFPaciente = new javax.swing.JTextField();
+        JBPesquisar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
+        JTListaConsultas = new javax.swing.JTable();
+        JLData = new javax.swing.JLabel();
+        JFTFDataInicio = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
-        jFormattedTextField2 = new javax.swing.JFormattedTextField();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        JFTFDataFim = new javax.swing.JFormattedTextField();
+        JBListar = new javax.swing.JButton();
+        JBEditar = new javax.swing.JButton();
+        JBAdicionar = new javax.swing.JButton();
+        JBRemover = new javax.swing.JButton();
 
         setClosable(true);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Consulta", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
-        jLabel1.setText("Medico:");
+        JLCodigo.setText("Codigo : ");
 
-        jLabel2.setText("Paciente:");
+        JLMedico.setText("Medico :");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        JLPaciente.setText("Paciente :");
+
+        JBPesquisar.setText("Pesquisar");
+        JBPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBPesquisarActionPerformed(evt);
+            }
+        });
+
+        JTListaConsultas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -84,24 +109,13 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        jTable1.getColumnModel().getColumn(0).setMinWidth(70);
-        jTable1.getColumnModel().getColumn(0).setMaxWidth(170);
-        jTable1.getColumnModel().getColumn(1).setMinWidth(70);
-        jTable1.getColumnModel().getColumn(1).setMaxWidth(170);
-        jTable1.getColumnModel().getColumn(2).setMinWidth(150);
-        jTable1.getColumnModel().getColumn(2).setMaxWidth(200);
-        jTable1.getColumnModel().getColumn(3).setMinWidth(150);
-        jTable1.getColumnModel().getColumn(3).setMaxWidth(200);
+        JTListaConsultas.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(JTListaConsultas);
 
-        jButton1.setText("Pesquisar");
-
-        jLabel4.setText("Codigo:");
-
-        jLabel3.setText("Data:");
+        JLData.setText("Data :");
 
         try {
-            jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+            JFTFDataInicio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
@@ -109,18 +123,33 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
         jLabel5.setText("à");
 
         try {
-            jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+            JFTFDataFim.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
 
-        jButton4.setText("Editar");
+        JBListar.setText("Listar");
+        JBListar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBListarActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("Adicionar");
+        JBEditar.setText("Editar");
+        JBEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBEditarActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("Remover");
+        JBAdicionar.setText("Adicionar");
+        JBAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBAdicionarActionPerformed(evt);
+            }
+        });
 
-        jButton7.setText("Listar");
+        JBRemover.setText("Remover");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -129,44 +158,44 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel2))
-                        .addGap(10, 10, 10)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(JLCodigo)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(JTFCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(82, 82, 82)
+                                        .addComponent(JLMedico))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(JBPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(JLPaciente)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(JTFPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(JLData)
+                                            .addGap(14, 14, 14))))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jTextField4)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(JFTFDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(JFTFDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(JTFMedico)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(JBListar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(JBEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(JBAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(181, 181, 181)))))
+                                .addComponent(JBRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -174,30 +203,28 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                    .addComponent(JTFMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLMedico)
+                    .addComponent(JLCodigo)
+                    .addComponent(JTFCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(JLPaciente)
+                    .addComponent(JTFPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLData)
+                    .addComponent(jLabel5)
+                    .addComponent(JFTFDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JFTFDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addComponent(JBPesquisar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton7)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
+                    .addComponent(JBEditar)
+                    .addComponent(JBListar)
+                    .addComponent(JBAdicionar)
+                    .addComponent(JBRemover))
                 .addContainerGap())
         );
 
@@ -214,33 +241,255 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void JBListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBListarActionPerformed
+       this.zerarModelo();
+       this.listaConsulta = ConsultaController.obterInstancia().listar();
+       this.listaMedico = MedicoController.obterInstancia().listarMedico();
+       this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+       SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+       
+       
+       
+       for(int i =0; i< this.listaConsulta.size();i++){
+           String nomeMedico = null, nomePaciente = null;
+           for(int y = 0; y< this.listaMedico.size();y++){
+               if(this.listaConsulta.get(i).getCodMedico().
+                       equals(this.listaMedico.get(y).getCrm())){
+                   nomeMedico = this.listaMedico.get(y).getNome();
+               }
+           }
+           for(int z = 0; z < this.listaPaciente.size(); z++){
+               if(this.listaConsulta.get(i).getCodPaciente().
+                       equals(this.listaPaciente.get(z).getCodigo())){
+                   nomePaciente = this.listaPaciente.get(z).getNome();
+               }
+           }
+           
+           modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
+                                       sdf.format(this.listaConsulta.get(i).getData()),
+                                       nomeMedico,nomePaciente});
+       }
+       
+       JTListaConsultas.setModel(modelo);
+       
+    }//GEN-LAST:event_JBListarActionPerformed
 
+    private void JBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBPesquisarActionPerformed
+       this.zerarModelo();
+       this.listaConsulta = ConsultaController.obterInstancia().listar();
+       this.listaMedico = MedicoController.obterInstancia().listarMedico();
+       this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+       
+       try{
+           JTListaConsultas.setModel(verificarFiltros(modelo));
+       }catch(Exception e){
+           JOptionPane.showMessageDialog(this,"Erro: "+e.getMessage(),"ERRO",0);
+       }
+    }//GEN-LAST:event_JBPesquisarActionPerformed
+
+    private void JBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEditarActionPerformed
+       try{
+           for(int i=0; i < this.listaConsulta.size();i++){
+               if(JTListaConsultas.getSelectedRow() == i){
+                   
+                   CadastrarConsultaUI cadastroConsulta = 
+                           new CadastrarConsultaUI(this.listaConsulta.get(i));
+                   cadastroConsulta.setVisible(true);
+                   PrincipalUI.obterInstancia().obterTela().add(cadastroConsulta);
+                   cadastroConsulta.toFront();
+               }
+           }
+       }catch(Exception ex){
+           JOptionPane.showMessageDialog(this, ex.getMessage());
+       }
+    }//GEN-LAST:event_JBEditarActionPerformed
+
+    private void JBAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAdicionarActionPerformed
+       CadastrarConsultaUI cadastroConsulta = new CadastrarConsultaUI(null);
+       cadastroConsulta.setVisible(true);
+       PrincipalUI.obterInstancia().obterTela().add(cadastroConsulta);
+       cadastroConsulta.toFront();
+    }//GEN-LAST:event_JBAdicionarActionPerformed
+
+    public DefaultTableModel verificarFiltros(DefaultTableModel modelo) throws Exception{
+        Integer codigo;
+        String medico = JTFMedico.getText();
+        String paciente = JTFPaciente.getText();
+        Date dataIni = null,dataFim = null;
+        SimpleDateFormat sdp = new SimpleDateFormat("dd/mm/yyyy");
+        
+        this.verificarNome(medico, 1);
+        this.verificarNome(paciente, 2);
+        try{
+            dataIni = sdp.parse(JFTFDataInicio.getText());
+            dataFim = sdp.parse(JFTFDataFim.getText());
+        }catch(Exception e){
+            dataIni = null;
+            dataFim = null;
+        }
+                
+        try{
+            codigo = Integer.parseInt(JTFCodigo.getText());
+        }catch(NumberFormatException e){
+            codigo = null;
+        }
+        
+        for(int i=0 ; i < this.listaConsulta.size(); i++){
+            String nomeMedico = "", nomePaciente = "";
+            
+            // for para pegar o nome do medico de acordo com o codMedico
+            for (Medico listaMedico1 : this.listaMedico) {
+                if (this.listaConsulta.get(i).getCodMedico().equals(listaMedico1.getCrm())) {
+                    nomeMedico = listaMedico1.getNome();
+                }
+            }
+            // for para pega o nome do paciente de acordo com o codPaciente
+            for(Paciente listaPaciente1 : this.listaPaciente){
+                if(this.listaConsulta.get(i).getCodPaciente().equals(listaPaciente1.getCodigo())){
+                    nomePaciente = listaPaciente1.getNome();
+                }
+            }
+            
+            //Verifica pelo codigo
+            if(codigo != null && dataIni == null){
+                if(!medico.isEmpty() && paciente.isEmpty()){// Verifica o codigo e o Medico
+                   if(this.listaConsulta.get(i).getCodigo().equals(codigo) &&
+                           nomeMedico.equals(medico)){
+                        modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
+                                                sdp.format(this.listaConsulta.get(i).getData()),
+                                                nomeMedico,nomePaciente});
+                   }else
+                   if(this.listaConsulta.get(i).getCodigo().equals(codigo) &&
+                           !nomeMedico.equals(medico)){
+                        throw new Exception("Dados Incorretos !! Codigo e Médico não conferem");
+                    }
+                }else
+                if(!paciente.isEmpty() && medico.isEmpty()){ // Verifica o codigo e o Paciente
+                    if(this.listaConsulta.get(i).getCodigo().equals(codigo) &&
+                            nomePaciente.equals(paciente)){
+                        modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
+                                                sdp.format(this.listaConsulta.get(i).getData()),
+                                                nomeMedico,nomePaciente});
+                    }else
+                    if(this.listaConsulta.get(i).getCodigo().equals(codigo) &&
+                            !nomePaciente.equals(paciente)){
+                        throw new Exception("Dados Incorretos !! Codigo e Paciente não conferem");
+                    }
+                }else
+                if(!medico.isEmpty() && !paciente.isEmpty()){ // Verifica o Codigo e o Medico e o Paciente
+                    if(this.listaConsulta.get(i).getCodigo().equals(codigo)){
+                        if(nomeMedico.equals(medico) && nomePaciente.equals(paciente)){ // Confere o Medico e o Pacientes
+                            modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
+                                                sdp.format(this.listaConsulta.get(i).getData()),
+                                                nomeMedico,nomePaciente});
+                        }else
+                        if(nomeMedico.equals(medico) && !nomePaciente.equals(paciente)){ // Paciente não confere
+                            throw new Exception("Paciente não confere");
+                        }else
+                        if(!nomeMedico.equals(medico) && nomePaciente.equals(paciente)){ // Medico não confere
+                            throw new Exception("Medico não confere");
+                        }else
+                        if(!nomeMedico.equals(medico) && !nomePaciente.equals(paciente)){ // Se ambos não confere
+                            throw new Exception("Medico e Paciente não confere");
+                        }
+                    }
+                }else
+                if(this.listaConsulta.get(i).getCodigo().equals(codigo)){
+                    modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
+                                                sdp.format(this.listaConsulta.get(i).getData()),
+                                                nomeMedico,nomePaciente});
+                }
+            }else
+            //Verifica pelo medico
+            if(codigo == null && !medico.isEmpty() && paciente.isEmpty() && dataIni == null){
+                if(nomeMedico.equals(medico)){
+                    modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
+                                                sdp.format(this.listaConsulta.get(i).getData()),
+                                                nomeMedico,nomePaciente});
+                }
+            }else
+            // Verifica pelo Paciente
+            if(codigo == null && medico.isEmpty() && !paciente.isEmpty() && dataIni == null){
+                if(nomePaciente.equals(paciente)){
+                    modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
+                                                sdp.format(this.listaConsulta.get(i).getData()),
+                                                nomeMedico,nomePaciente}); 
+                }
+            }else
+                      
+            // Verificar pelo Medico e Paciente
+            if(codigo == null && !medico.isEmpty() && !paciente.isEmpty() && dataIni==null){
+                if(nomeMedico.equals(medico) && nomePaciente.equals(paciente)){
+                    modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
+                                                sdp.format(this.listaConsulta.get(i).getData()),
+                                                nomeMedico,nomePaciente}); 
+                }else
+                if(nomeMedico.equals(medico) && !nomePaciente.equals(paciente)){
+                    throw new Exception("Dados incorretos !! Medico e Paciente não conferem");
+                }
+            }else
+            
+            // Se não tiver nada populado mostra a lista toda
+            if(codigo == null && medico.isEmpty() && paciente.isEmpty() && dataIni == null){
+                modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
+                                                sdp.format(this.listaConsulta.get(i).getData()),
+                                                nomeMedico,nomePaciente}); 
+            }
+        }
+        
+       
+        if(modelo.getRowCount() != 0){
+            return modelo;
+        }else{
+            throw new Exception("Nenhum dado cadastrado");
+        }
+        
+    }
+    
+    private void zerarModelo(){
+       modelo = new DefaultTableModel();
+       modelo.setColumnIdentifiers(new String[] {"Codigo","Data","Medico","Paciente"});
+    }
+    
+    private void verificarNome(String nome, Integer tipo) throws Exception{
+         for(int i=0;i<nome.length();i++){
+                if(Character.isDigit(nome.charAt(i))){
+                    if(tipo == 1){  
+                        throw new Exception("Contem numero no nome medico");
+                    }else
+                    if(tipo == 2){
+                        throw new Exception("Contem numero no nome paciente");
+                    }    
+                    
+                }
+          }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
-    private javax.swing.JFormattedTextField jFormattedTextField2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JButton JBAdicionar;
+    private javax.swing.JButton JBEditar;
+    private javax.swing.JButton JBListar;
+    private javax.swing.JButton JBPesquisar;
+    private javax.swing.JButton JBRemover;
+    private javax.swing.JFormattedTextField JFTFDataFim;
+    private javax.swing.JFormattedTextField JFTFDataInicio;
+    private javax.swing.JLabel JLCodigo;
+    private javax.swing.JLabel JLData;
+    private javax.swing.JLabel JLMedico;
+    private javax.swing.JLabel JLPaciente;
+    private javax.swing.JTextField JTFCodigo;
+    private javax.swing.JTextField JTFMedico;
+    private javax.swing.JTextField JTFPaciente;
+    private javax.swing.JTable JTListaConsultas;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
-
 }
