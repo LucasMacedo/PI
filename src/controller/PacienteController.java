@@ -7,7 +7,7 @@
 package controller;
 
 import dao.PacienteDao;
-import java.util.ArrayList;
+import java.util.List;
 import model.Paciente;
 
 /**
@@ -17,38 +17,34 @@ import model.Paciente;
 public class PacienteController {
     
     private static PacienteController instanciaRep;
-    private static Integer id;
     
     public static PacienteController obterInstancia(){
         if(instanciaRep == null){
             instanciaRep = new PacienteController();
-            id = 0;
         }
-        id++;
         return instanciaRep;
     }
     
     public void cadastrar(Paciente paciente) throws Exception{
         if(paciente.getNome().isEmpty()){
-            throw new Exception("Nome esta invalido !!");
+            throw new Exception("Nome inválido!");
         }else{
             this.verificaNome(paciente.getNome());
         }
         if(paciente.getCpf().equals("   .   .   -  ")){
-            throw new Exception("CPF esta invalido !!");
+            throw new Exception("CPF inválido!");
         }
         if(paciente.getTelefone().isEmpty()){
-            throw new Exception("Telefone invalido !!");
+            throw new Exception("Telefone inválido!");
         }
         if(paciente.getEndereco().isEmpty()){
-            throw new Exception("Endereço invalido !!");
+            throw new Exception("Endereço inválido!");
         }
-            paciente.setCodigo(id);
-        
+                
         PacienteDao.obterInstancia().incluir(paciente);
     }
     
-    public ArrayList listarPaciente(){
+    public List listarPaciente() throws Exception{
         return PacienteDao.obterInstancia().obterLista();
     }
 

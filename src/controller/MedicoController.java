@@ -7,8 +7,8 @@
 package controller;
 
 import dao.MedicoDao;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
+import java.sql.SQLException;
+import java.util.List;
 import model.Medico;
 
 /**
@@ -53,7 +53,7 @@ public class MedicoController {
         MedicoDao.obterInstancia().incluir(medico);
     }
     
-    public ArrayList listarMedico(){
+    public List<Medico> listarMedico() throws Exception{
         return MedicoDao.obterInstancia().obterLista();
     }
 

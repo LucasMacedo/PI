@@ -4,17 +4,24 @@
  */
 package dao;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Consulta;
+import util.SqlHelper;
 
 /**
  *
  * @author lucas_macedo
  */
-public class ConsultaDao {
+public class ConsultaDao extends SqlHelper{
     
     private static ConsultaDao instanciaRep;
-    private ArrayList<Consulta> listaConsulta;
             
     public static ConsultaDao obterInstancia(){
         if(instanciaRep == null){
@@ -23,24 +30,55 @@ public class ConsultaDao {
         return instanciaRep;
     }
     
-    public ConsultaDao(){
-        this.listaConsulta = new ArrayList<Consulta>();
+    public void incluir(Consulta consulta) throws SQLException{
+        StringBuilder sql = new StringBuilder();
+        sql.append("INSERT INTO CONSULTA VALUES (?,?,?,?,?)");
+        
+        try {
+            PreparedStatement st = getPreparedStatement(sql, NO_KEY);
+            st.setInt(1, consulta.getCodigo());
+            st.setDate(2, new Date(consulta.getData().getTime()));
+            st.setString(3, consulta.getObservacao());
+            st.setInt(4, consulta.getCodMedico());
+            st.setInt(5, consulta.getCodPaciente());
+            
+            st.executeUpdate();
+        } catch (SQLException ex) {
+             Logger.getLogger(ConsultaDao.class.getName()).log(Level.SEVERE, null, ex);
+             throw ex;
+        } finally {
+            ConnectionManager.closeConnection();
+        }
     }
     
-    public void incluir(Consulta consulta){
-        this.listaConsulta.add(consulta);
-    }
-    
-    public ArrayList listar(){
-        return this.listaConsulta;
+    public List<Consulta> listar() throws SQLException{
+        List<Consulta> consultas = new ArrayList<>();
+        
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT * FROM CONSULTA");
+        
+        try {
+            PreparedStatement st = getPreparedStatement(sql, NO_KEY);
+            ResultSet rs = st.executeQuery();
+            
+            while(rs.next()){
+                Consulta consulta = new Consulta();
+                consulta.setCodMedico(rs.getInt("CODMEDICO"));
+                consulta.setCodPaciente(rs.getInt("CODPACIENTE"));
+                consulta.setCodigo(rs.getInt("CODIGO"));
+                consulta.setData(rs.getDate("DATA"));
+                consulta.setObservacao(rs.getString("OBSERVACAO"));
+                consultas.add(consulta);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConsultaDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+        return consultas;
     }
 
     public void alterar(Consulta consultaAnt) {
-        for(int i=0;i<this.listaConsulta.size();i++){
-            if(this.listaConsulta.get(i).equals(consultaAnt)){
-                this.listaConsulta.indexOf(consultaAnt);
-            }
-        }
+        
     }
     
     

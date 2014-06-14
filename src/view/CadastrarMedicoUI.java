@@ -8,7 +8,7 @@ package view;
 
 import controller.EspecialidadeController;
 import controller.MedicoController;
-import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import model.Especialidade;
@@ -23,7 +23,7 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
     /**
      * Creates new form CadastrarMedico
      */
-    private ArrayList<Especialidade> listaEspecialidade;
+    private List<Especialidade> listaEspecialidade;
     private Medico medicoAnt;
     
     public CadastrarMedicoUI(Medico medico) {

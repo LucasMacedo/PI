@@ -1,7 +1,7 @@
 package controller;
 
 import dao.ConsultaDao;
-import java.util.ArrayList;
+import java.util.List;
 import model.Consulta;
 
 /**
@@ -11,21 +11,16 @@ import model.Consulta;
 public class ConsultaController {
     
     private static ConsultaController instanciaRep;
-    private static Integer id;
     
     public static ConsultaController obterInstancia(){
         if(instanciaRep == null){
             instanciaRep = new ConsultaController();
-            id = 0;
         }
-        id++;
         return instanciaRep;
     }
     
     public void cadastrar(Consulta consulta) throws Exception{
-        consulta.setCodigo(id);
-           
-        if(consulta.getCodMedico() == null){
+         if(consulta.getCodMedico() == null){
             throw new Exception("Medico não foi selecionado !");
         }
         if(consulta.getCodPaciente() == null){
@@ -44,7 +39,7 @@ public class ConsultaController {
         ConsultaDao.obterInstancia().incluir(consulta);
     }
     
-    public ArrayList listar(){
+    public List<Consulta> listar() throws Exception{
         return ConsultaDao.obterInstancia().listar();
     }
 

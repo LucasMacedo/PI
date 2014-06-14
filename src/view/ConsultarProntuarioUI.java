@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package view;
 
 import controller.ConsultaController;
 import controller.MedicoController;
 import controller.PacienteController;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Consulta;
@@ -27,12 +27,11 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
     /**
      * Creates new form ConsultarProntuario
      */
-    
-    private ArrayList<Consulta> listaConsulta;
-    private ArrayList<Medico> listaMedico;
-    private ArrayList<Paciente> listaPaciente;
+    private List<Consulta> listaConsulta;
+    private List<Medico> listaMedico;
+    private List<Paciente> listaPaciente;
     private DefaultTableModel modelo;
-    
+
     public ConsultarProntuarioUI() {
         initComponents();
         this.zerarModelo();
@@ -249,227 +248,183 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBListarActionPerformed
-       this.zerarModelo();
-       this.listaConsulta = ConsultaController.obterInstancia().listar();
-       this.listaMedico = MedicoController.obterInstancia().listarMedico();
-       this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
-       SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/YYYY");
-       
-       
-       
-       for(int i =0; i< this.listaConsulta.size();i++){
-           String nomeMedico = null, nomePaciente = null;
-           for(int y = 0; y< this.listaMedico.size();y++){
-               if(this.listaConsulta.get(i).getCodMedico().
-                       equals(this.listaMedico.get(y).getCrm())){
-                   nomeMedico = this.listaMedico.get(y).getNome();
-               }
-           }
-           for(int z = 0; z < this.listaPaciente.size(); z++){
-               if(this.listaConsulta.get(i).getCodPaciente().
-                       equals(this.listaPaciente.get(z).getCodigo())){
-                   nomePaciente = this.listaPaciente.get(z).getNome();
-               }
-           }
-           
-           modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
-                                       sdf.format(this.listaConsulta.get(i).getData()),
-                                       nomeMedico,nomePaciente});
-       }
-       
-       JTListaConsultas.setModel(modelo);
-       
+        this.zerarModelo();
+        this.listaConsulta = ConsultaController.obterInstancia().listar();
+        this.listaMedico = MedicoController.obterInstancia().listarMedico();
+        this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/YYYY");
+
+        for (Consulta listaConsulta1 : this.listaConsulta) {
+            String nomeMedico = null, nomePaciente = null;
+            for (Medico listaMedico1 : this.listaMedico) {
+                if (listaConsulta1.getCodMedico().equals(listaMedico1.getCrm())) {
+                    nomeMedico = listaMedico1.getNome();
+                }
+            }
+            for (Paciente listaPaciente1 : this.listaPaciente) {
+                if (listaConsulta1.getCodPaciente().equals(listaPaciente1.getCodigo())) {
+                    nomePaciente = listaPaciente1.getNome();
+                }
+            }
+            modelo.addRow(new Object[]{listaConsulta1.getCodigo(), sdf.format(listaConsulta1.getData()), nomeMedico, nomePaciente});
+        }
+
+        JTListaConsultas.setModel(modelo);
+
     }//GEN-LAST:event_JBListarActionPerformed
 
     private void JBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBPesquisarActionPerformed
-       this.zerarModelo();
-       this.listaConsulta = ConsultaController.obterInstancia().listar();
-       this.listaMedico = MedicoController.obterInstancia().listarMedico();
-       this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
-       
-       try{
-           JTListaConsultas.setModel(verificarFiltros(modelo));
-       }catch(Exception e){
-           JOptionPane.showMessageDialog(null,"Erro: "+e.getMessage(),"ERRO",0);
-       }
+        this.zerarModelo();
+        this.listaConsulta = ConsultaController.obterInstancia().listar();
+        this.listaMedico = MedicoController.obterInstancia().listarMedico();
+        this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+
+        try {
+            JTListaConsultas.setModel(verificarFiltros(modelo));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro: " + e.getMessage(), "ERRO", 0);
+        }
     }//GEN-LAST:event_JBPesquisarActionPerformed
 
     private void JBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEditarActionPerformed
-       try{
-           for(int i=0; i < this.listaConsulta.size();i++){
-               if(JTListaConsultas.getSelectedRow() == i){
-                   
-                   CadastrarConsultaUI cadastroConsulta = 
-                           new CadastrarConsultaUI(this.listaConsulta.get(i));
-                   cadastroConsulta.setVisible(true);
-                   PrincipalUI.obterInstancia().obterTela().add(cadastroConsulta);
-               }
-           }
-       }catch(Exception ex){
-           JOptionPane.showMessageDialog(null, ex.getMessage());
-       }
+        try {
+            for (int i = 0; i < this.listaConsulta.size(); i++) {
+                if (JTListaConsultas.getSelectedRow() == i) {
+
+                    CadastrarConsultaUI cadastroConsulta
+                            = new CadastrarConsultaUI(this.listaConsulta.get(i));
+                    cadastroConsulta.setVisible(true);
+                    PrincipalUI.obterInstancia().obterTela().add(cadastroConsulta);
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
     }//GEN-LAST:event_JBEditarActionPerformed
 
     private void JBAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAdicionarActionPerformed
-       CadastrarConsultaUI cadastroConsulta = new CadastrarConsultaUI(null);
-       cadastroConsulta.setVisible(true);
-       PrincipalUI.obterInstancia().obterTela().add(cadastroConsulta);
+        CadastrarConsultaUI cadastroConsulta = new CadastrarConsultaUI(null);
+        cadastroConsulta.setVisible(true);
+        PrincipalUI.obterInstancia().obterTela().add(cadastroConsulta);
     }//GEN-LAST:event_JBAdicionarActionPerformed
 
-    public DefaultTableModel verificarFiltros(DefaultTableModel modelo) throws Exception{
+    public DefaultTableModel verificarFiltros(DefaultTableModel modelo) throws Exception {
         Integer codigo;
         String medico = JTFMedico.getText();
         String paciente = JTFPaciente.getText();
-        Date dataIni = null,dataFim = null;
+        Date dataIni;
         SimpleDateFormat sdp = new SimpleDateFormat("dd/mm/yyyy");
-        
+
         this.verificarNome(medico, 1);
         this.verificarNome(paciente, 2);
-        try{
+        try {
             dataIni = sdp.parse(JFTFDataInicio.getText());
-            dataFim = sdp.parse(JFTFDataFim.getText());
-        }catch(Exception e){
+        } catch (ParseException e) {
             dataIni = null;
-            dataFim = null;
         }
-                
-        try{
+
+        try {
             codigo = Integer.parseInt(JTFCodigo.getText());
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             codigo = null;
         }
-        
-        for(int i=0 ; i < this.listaConsulta.size(); i++){
+
+        for (Consulta listaConsulta1 : this.listaConsulta) {
             String nomeMedico = "", nomePaciente = "";
-            
             // for para pegar o nome do medico de acordo com o codMedico
             for (Medico listaMedico1 : this.listaMedico) {
-                if (this.listaConsulta.get(i).getCodMedico().equals(listaMedico1.getCrm())) {
+                if (listaConsulta1.getCodMedico().equals(listaMedico1.getCrm())) {
                     nomeMedico = listaMedico1.getNome();
                 }
             }
             // for para pega o nome do paciente de acordo com o codPaciente
-            for(Paciente listaPaciente1 : this.listaPaciente){
-                if(this.listaConsulta.get(i).getCodPaciente().equals(listaPaciente1.getCodigo())){
+            for (Paciente listaPaciente1 : this.listaPaciente) {
+                if (listaConsulta1.getCodPaciente().equals(listaPaciente1.getCodigo())) {
                     nomePaciente = listaPaciente1.getNome();
                 }
             }
-            
             //Verifica pelo codigo
-            if(codigo != null && dataIni == null){
-                if(!medico.isEmpty() && paciente.isEmpty()){// Verifica o codigo e o Medico
-                   if(this.listaConsulta.get(i).getCodigo().equals(codigo) &&
-                           nomeMedico.equals(medico)){
-                        modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
-                                                sdp.format(this.listaConsulta.get(i).getData()),
-                                                nomeMedico,nomePaciente});
-                   }else
-                   if(this.listaConsulta.get(i).getCodigo().equals(codigo) &&
-                           !nomeMedico.equals(medico)){
+            if (codigo != null && dataIni == null) {
+                if (!medico.isEmpty() && paciente.isEmpty()) {
+                    // Verifica o codigo e o Medico
+                    if (listaConsulta1.getCodigo().equals(codigo) && nomeMedico.equals(medico)) {
+                        modelo.addRow(new Object[]{listaConsulta1.getCodigo(), sdp.format(listaConsulta1.getData()), nomeMedico, nomePaciente});
+                    } else if (listaConsulta1.getCodigo().equals(codigo) && !nomeMedico.equals(medico)) {
                         throw new Exception("Dados Incorretos !! Codigo e Médico não conferem");
                     }
-                }else
-                if(!paciente.isEmpty() && medico.isEmpty()){ // Verifica o codigo e o Paciente
-                    if(this.listaConsulta.get(i).getCodigo().equals(codigo) &&
-                            nomePaciente.equals(paciente)){
-                        modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
-                                                sdp.format(this.listaConsulta.get(i).getData()),
-                                                nomeMedico,nomePaciente});
-                    }else
-                    if(this.listaConsulta.get(i).getCodigo().equals(codigo) &&
-                            !nomePaciente.equals(paciente)){
+                } else if (!paciente.isEmpty() && medico.isEmpty()) {
+                    // Verifica o codigo e o Paciente
+                    if (listaConsulta1.getCodigo().equals(codigo) && nomePaciente.equals(paciente)) {
+                        modelo.addRow(new Object[]{listaConsulta1.getCodigo(), sdp.format(listaConsulta1.getData()), nomeMedico, nomePaciente});
+                    } else if (listaConsulta1.getCodigo().equals(codigo) && !nomePaciente.equals(paciente)) {
                         throw new Exception("Dados Incorretos !! Codigo e Paciente não conferem");
                     }
-                }else
-                if(!medico.isEmpty() && !paciente.isEmpty()){ // Verifica o Codigo e o Medico e o Paciente
-                    if(this.listaConsulta.get(i).getCodigo().equals(codigo)){
-                        if(nomeMedico.equals(medico) && nomePaciente.equals(paciente)){ // Confere o Medico e o Pacientes
-                            modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
-                                                sdp.format(this.listaConsulta.get(i).getData()),
-                                                nomeMedico,nomePaciente});
-                        }else
-                        if(nomeMedico.equals(medico) && !nomePaciente.equals(paciente)){ // Paciente não confere
+                } else if (!medico.isEmpty() && !paciente.isEmpty()) {
+                    // Verifica o Codigo e o Medico e o Paciente
+                    if (listaConsulta1.getCodigo().equals(codigo)) {
+                        if (nomeMedico.equals(medico) && nomePaciente.equals(paciente)) {
+                            // Confere o Medico e o Pacientes
+                            modelo.addRow(new Object[]{listaConsulta1.getCodigo(), sdp.format(listaConsulta1.getData()), nomeMedico, nomePaciente});
+                        } else if (nomeMedico.equals(medico) && !nomePaciente.equals(paciente)) { // Paciente não confere
                             throw new Exception("Paciente não confere");
-                        }else
-                        if(!nomeMedico.equals(medico) && nomePaciente.equals(paciente)){ // Medico não confere
+                        } else if (!nomeMedico.equals(medico) && nomePaciente.equals(paciente)) { // Medico não confere
                             throw new Exception("Medico não confere");
-                        }else
-                        if(!nomeMedico.equals(medico) && !nomePaciente.equals(paciente)){ // Se ambos não confere
+                        } else if (!nomeMedico.equals(medico) && !nomePaciente.equals(paciente)) { // Se ambos não confere
                             throw new Exception("Medico e Paciente não confere");
                         }
                     }
-                }else
-                if(this.listaConsulta.get(i).getCodigo().equals(codigo)){
-                    modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
-                                                sdp.format(this.listaConsulta.get(i).getData()),
-                                                nomeMedico,nomePaciente});
+                } else if (listaConsulta1.getCodigo().equals(codigo)) {
+                    modelo.addRow(new Object[]{listaConsulta1.getCodigo(), sdp.format(listaConsulta1.getData()), nomeMedico, nomePaciente});
                 }
-            }else
-            //Verifica pelo medico
-            if(codigo == null && !medico.isEmpty() && paciente.isEmpty() && dataIni == null){
-                if(nomeMedico.equals(medico)){
-                    modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
-                                                sdp.format(this.listaConsulta.get(i).getData()),
-                                                nomeMedico,nomePaciente});
+            } else //Verifica pelo medico
+            if (codigo == null && !medico.isEmpty() && paciente.isEmpty() && dataIni == null) {
+                if (nomeMedico.equals(medico)) {
+                    modelo.addRow(new Object[]{listaConsulta1.getCodigo(), sdp.format(listaConsulta1.getData()), nomeMedico, nomePaciente});
                 }
-            }else
-            // Verifica pelo Paciente
-            if(codigo == null && medico.isEmpty() && !paciente.isEmpty() && dataIni == null){
-                if(nomePaciente.equals(paciente)){
-                    modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
-                                                sdp.format(this.listaConsulta.get(i).getData()),
-                                                nomeMedico,nomePaciente}); 
+            } else // Verifica pelo Paciente
+            if (codigo == null && medico.isEmpty() && !paciente.isEmpty() && dataIni == null) {
+                if (nomePaciente.equals(paciente)) {
+                    modelo.addRow(new Object[]{listaConsulta1.getCodigo(), sdp.format(listaConsulta1.getData()), nomeMedico, nomePaciente});
                 }
-            }else
-                      
-            // Verificar pelo Medico e Paciente
-            if(codigo == null && !medico.isEmpty() && !paciente.isEmpty() && dataIni==null){
-                if(nomeMedico.equals(medico) && nomePaciente.equals(paciente)){
-                    modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
-                                                sdp.format(this.listaConsulta.get(i).getData()),
-                                                nomeMedico,nomePaciente}); 
-                }else
-                if(nomeMedico.equals(medico) && !nomePaciente.equals(paciente)){
+            } else // Verificar pelo Medico e Paciente
+            if (codigo == null && !medico.isEmpty() && !paciente.isEmpty() && dataIni == null) {
+                if (nomeMedico.equals(medico) && nomePaciente.equals(paciente)) {
+                    modelo.addRow(new Object[]{listaConsulta1.getCodigo(), sdp.format(listaConsulta1.getData()), nomeMedico, nomePaciente});
+                } else if (nomeMedico.equals(medico) && !nomePaciente.equals(paciente)) {
                     throw new Exception("Dados incorretos !! Medico e Paciente não conferem");
                 }
-            }else
-            
-            // Se não tiver nada populado mostra a lista toda
-            if(codigo == null && medico.isEmpty() && paciente.isEmpty() && dataIni == null){
-                modelo.addRow(new Object[] {this.listaConsulta.get(i).getCodigo(),
-                                                sdp.format(this.listaConsulta.get(i).getData()),
-                                                nomeMedico,nomePaciente}); 
+            } else // Se não tiver nada populado mostra a lista toda
+            if (codigo == null && medico.isEmpty() && paciente.isEmpty() && dataIni == null) {
+                modelo.addRow(new Object[]{listaConsulta1.getCodigo(), sdp.format(listaConsulta1.getData()), nomeMedico, nomePaciente});
             }
         }
-        
-       
-        if(modelo.getRowCount() != 0){
+
+        if (modelo.getRowCount() != 0) {
             return modelo;
-        }else{
+        } else {
             throw new Exception("Nenhum dado cadastrado");
         }
-        
+
     }
-    
-    private void zerarModelo(){
-       modelo = new DefaultTableModel();
-       modelo.setColumnIdentifiers(new String[] {"Codigo","Data","Medico","Paciente"});
+
+    private void zerarModelo() {
+        modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new String[]{"Codigo", "Data", "Medico", "Paciente"});
     }
-    
-    private void verificarNome(String nome, Integer tipo) throws Exception{
-         for(int i=0;i<nome.length();i++){
-                if(Character.isDigit(nome.charAt(i))){
-                    if(tipo == 1){  
-                        throw new Exception("Contem numero no nome medico");
-                    }else
-                    if(tipo == 2){
-                        throw new Exception("Contem numero no nome paciente");
-                    }    
-                    
+
+    private void verificarNome(String nome, Integer tipo) throws Exception {
+        for (int i = 0; i < nome.length(); i++) {
+            if (Character.isDigit(nome.charAt(i))) {
+                if (tipo == 1) {
+                    throw new Exception("Contem numero no nome medico");
+                } else if (tipo == 2) {
+                    throw new Exception("Contem numero no nome paciente");
                 }
-          }
+
+            }
+        }
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBAdicionar;
     private javax.swing.JButton JBEditar;

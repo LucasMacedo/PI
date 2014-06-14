@@ -9,9 +9,11 @@ package view;
 import controller.ConsultaController;
 import controller.MedicoController;
 import controller.PacienteController;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Consulta;
@@ -27,8 +29,8 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
     /**
      * Creates new form CadastrarConsulta
      */
-    private ArrayList<Paciente> listaPaciente;
-    private ArrayList<Medico> listaMedico;
+    private final List<Paciente> listaPaciente;
+    private final List<Medico> listaMedico;
     private DefaultTableModel modelo, modeloMedico;
     private Consulta consultaAnt;
     
@@ -48,17 +50,15 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
             JTAProcedimento.setText(consulta.getProcedimento());
             JTAObservacao.setText(consulta.getObservacao());
             
-            for(int i=0; i < this.listaMedico.size();i++){
-                if(consulta.getCodMedico().equals(this.listaMedico.get(i).getCrm())){
-                     modeloMedico.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
-                                              this.listaMedico.get(i).getNome()});
+            for (Medico listaMedico1 : this.listaMedico) {
+                if (consulta.getCodMedico().equals(listaMedico1.getCrm())) {
+                    modeloMedico.addRow(new Object[]{listaMedico1.getCrm(), listaMedico1.getNome()});
                 }
             }
             
-            for(int y=0; y< this.listaPaciente.size();y++){
-                if(consulta.getCodPaciente().equals(this.listaPaciente.get(y).getCodigo())){
-                    modelo.addRow(new Object[] {this.listaPaciente.get(y).getCodigo(),
-                                              this.listaPaciente.get(y).getNome()});
+            for (Paciente listaPaciente1 : this.listaPaciente) {
+                if (consulta.getCodPaciente().equals(listaPaciente1.getCodigo())) {
+                    modelo.addRow(new Object[]{listaPaciente1.getCodigo(), listaPaciente1.getNome()});
                 }
             }
            
@@ -428,7 +428,7 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/YYYY");
                     data = (Date) sdf.parse(JFTDataConsulta.getText());
                     consultaAnt.setData(data);
-                }catch(Exception e){}
+                }catch(ParseException e){}
                 
                 consultaAnt.setProcedimento(JTAProcedimento.getText());
                 consultaAnt.setObservacao(JTAObservacao.getText());
@@ -456,7 +456,7 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/YYYY");
                     data = sdf.parse(JFTDataConsulta.getText());
                     consulta.setData(data);
-                }catch(Exception e){}
+                }catch(ParseException e){}
 
                 ConsultaController.obterInstancia().cadastrar(consulta);
             }
@@ -472,39 +472,30 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
        Integer codigo;
        try{
            codigo = Integer.parseInt(JTFCodigoPaciente.getText());
-       }catch(Exception e){
+       }catch(NumberFormatException e){
            codigo = 0;
        }
        
-       for(int i=0;i< this.listaPaciente.size(); i++){
-          if(!nome.isEmpty() && codigo != 0){
-              if(this.listaPaciente.get(i).getCodigo() == codigo && 
-                       !this.listaPaciente.get(i).getNome().equals(nome)){
-                  throw new Exception("Codigo e nome diferentes !!");
-              }
-              
-              if(this.listaPaciente.get(i).getCodigo().equals(codigo)){
-                  modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
-                                              this.listaPaciente.get(i).getNome()});
-              }              
-          }else
-          if(!nome.isEmpty() && codigo == 0){
-              if(this.listaPaciente.get(i).getNome().contains(nome)){
-                  modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
-                                              this.listaPaciente.get(i).getNome()});
-              }
-          }else
-          if(nome.isEmpty() && codigo != 0){
-              if(this.listaPaciente.get(i).getCodigo().equals(codigo)){
-                  modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
-                                              this.listaPaciente.get(i).getNome()}); 
-              }
-          }else
-          if(nome.isEmpty() && codigo ==0){
-               modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
-                                              this.listaPaciente.get(i).getNome()}); 
-          }
-       }
+        for (Paciente listaPaciente1 : this.listaPaciente) {
+            if (!nome.isEmpty() && codigo != 0) {
+                if (Objects.equals(listaPaciente1.getCodigo(), codigo) && !listaPaciente1.getNome().equals(nome)) {
+                    throw new Exception("Codigo e nome diferentes !!");
+                }
+                if (listaPaciente1.getCodigo().equals(codigo)) {
+                    modelo.addRow(new Object[]{listaPaciente1.getCodigo(), listaPaciente1.getNome()});
+                }
+            } else if (!nome.isEmpty() && codigo == 0) {
+                if (listaPaciente1.getNome().contains(nome)) {
+                    modelo.addRow(new Object[]{listaPaciente1.getCodigo(), listaPaciente1.getNome()});
+                }
+            } else if (nome.isEmpty() && codigo != 0) {
+                if (listaPaciente1.getCodigo().equals(codigo)) {
+                    modelo.addRow(new Object[]{listaPaciente1.getCodigo(), listaPaciente1.getNome()});
+                }
+            } else if (nome.isEmpty() && codigo ==0) {
+                modelo.addRow(new Object[]{listaPaciente1.getCodigo(), listaPaciente1.getNome()});
+            }
+        }
        
        return modelo;
     }
@@ -514,39 +505,30 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
        Integer codigo;
        try{
            codigo = Integer.parseInt(JTFCRM.getText());
-       }catch(Exception e){
+       }catch(NumberFormatException e){
            codigo = 0;
        }
        
-       for(int i=0;i< this.listaMedico.size(); i++){
-          if(!nome.isEmpty() && codigo != 0){
-              if(this.listaMedico.get(i).getCrm() == codigo && 
-                       !this.listaMedico.get(i).getNome().equals(nome)){
-                  throw new Exception("Codigo e nome diferentes !!");
-              }
-              
-              if(this.listaMedico.get(i).getCrm()== codigo){
-                  modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
-                                              this.listaMedico.get(i).getNome()});
-              }              
-          }else
-          if(!nome.isEmpty() && codigo == 0){
-              if(this.listaMedico.get(i).getNome().contains(nome)){
-                  modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
-                                              this.listaMedico.get(i).getNome()});
-              }
-          }else
-          if(nome.isEmpty() && codigo != 0){
-              if(this.listaMedico.get(i).getCrm() == codigo){
-                  modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
-                                              this.listaMedico.get(i).getNome()}); 
-              }
-          }else
-          if(nome.isEmpty() && codigo ==0){
-               modelo.addRow(new Object[] {this.listaMedico.get(i).getCrm(),
-                                              this.listaMedico.get(i).getNome()}); 
-          }
-       }
+        for (Medico listaMedico1 : this.listaMedico) {
+            if (!nome.isEmpty() && codigo != 0) {
+                if (Objects.equals(listaMedico1.getCrm(), codigo) && !listaMedico1.getNome().equals(nome)) {
+                    throw new Exception("Codigo e nome diferentes !!");
+                }
+                if (Objects.equals(listaMedico1.getCrm(), codigo)) {
+                    modelo.addRow(new Object[]{listaMedico1.getCrm(), listaMedico1.getNome()});
+                }
+            } else if (!nome.isEmpty() && codigo == 0) {
+                if (listaMedico1.getNome().contains(nome)) {
+                    modelo.addRow(new Object[]{listaMedico1.getCrm(), listaMedico1.getNome()});
+                }
+            } else if (nome.isEmpty() && codigo != 0) {
+                if (Objects.equals(listaMedico1.getCrm(), codigo)) {
+                    modelo.addRow(new Object[]{listaMedico1.getCrm(), listaMedico1.getNome()});
+                }
+            } else if (nome.isEmpty() && codigo ==0) {
+                modelo.addRow(new Object[]{listaMedico1.getCrm(), listaMedico1.getNome()});
+            }
+        }
        
        return modelo;
     }

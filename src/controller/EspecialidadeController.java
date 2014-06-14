@@ -6,9 +6,9 @@
 
 package controller;
 
-
 import dao.EspecialidadeDao;
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.util.List;
 import model.Especialidade;
 
 /**
@@ -26,11 +26,11 @@ public class EspecialidadeController {
         return instanciaRep;
     }
     
-    public void cadastra(Especialidade esp){
+    public void cadastra(Especialidade esp) throws Exception{
         EspecialidadeDao.obterInstancia().cadastar(esp);
     }
     
-    public ArrayList obterLista(){
+    public List<Especialidade> obterLista() throws Exception{
         return EspecialidadeDao.obterInstancia().listar();
     }
     
