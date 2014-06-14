@@ -52,14 +52,13 @@ public class PrincipalUI extends javax.swing.JFrame {
         JMIConsultaPaciente = new javax.swing.JMenuItem();
         JMIConsultaConsulta = new javax.swing.JMenuItem();
         JMRelatorio = new javax.swing.JMenu();
-        JMIRelatorioMedico = new javax.swing.JMenuItem();
-        JMIRelatorioPaciente = new javax.swing.JMenuItem();
         JMIRelatorioConsulta = new javax.swing.JMenuItem();
         JMSair = new javax.swing.JMenu();
 
         jMenuItem5.setText("jMenuItem5");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setExtendedState(MAXIMIZED_BOTH);
 
         jdpTelaSecundaria.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -76,6 +75,7 @@ public class PrincipalUI extends javax.swing.JFrame {
 
         JMCadastro.setText("Cadastro");
 
+        JMICadastroMedico.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         JMICadastroMedico.setText("Médico");
         JMICadastroMedico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -84,6 +84,7 @@ public class PrincipalUI extends javax.swing.JFrame {
         });
         JMCadastro.add(JMICadastroMedico);
 
+        JMICadastroPaciente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         JMICadastroPaciente.setText("Paciente");
         JMICadastroPaciente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -92,6 +93,7 @@ public class PrincipalUI extends javax.swing.JFrame {
         });
         JMCadastro.add(JMICadastroPaciente);
 
+        JMICadastroConsulta.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
         JMICadastroConsulta.setText("Consulta");
         JMICadastroConsulta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,6 +106,7 @@ public class PrincipalUI extends javax.swing.JFrame {
 
         JMConsulta.setText("Consulta");
 
+        JMIConsultaMedico.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
         JMIConsultaMedico.setText("Médicos");
         JMIConsultaMedico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -112,6 +115,7 @@ public class PrincipalUI extends javax.swing.JFrame {
         });
         JMConsulta.add(JMIConsultaMedico);
 
+        JMIConsultaPaciente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
         JMIConsultaPaciente.setText("Paciente");
         JMIConsultaPaciente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,6 +124,7 @@ public class PrincipalUI extends javax.swing.JFrame {
         });
         JMConsulta.add(JMIConsultaPaciente);
 
+        JMIConsultaConsulta.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0));
         JMIConsultaConsulta.setText("Consultas");
         JMIConsultaConsulta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -132,13 +137,13 @@ public class PrincipalUI extends javax.swing.JFrame {
 
         JMRelatorio.setText("Relatorios");
 
-        JMIRelatorioMedico.setText("Medico");
-        JMRelatorio.add(JMIRelatorioMedico);
-
-        JMIRelatorioPaciente.setText("Paciente");
-        JMRelatorio.add(JMIRelatorioPaciente);
-
-        JMIRelatorioConsulta.setText("Consulta");
+        JMIRelatorioConsulta.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0));
+        JMIRelatorioConsulta.setText("Consulta por Paciente");
+        JMIRelatorioConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JMIRelatorioConsultaActionPerformed(evt);
+            }
+        });
         JMRelatorio.add(JMIRelatorioConsulta);
 
         jMenuBar1.add(JMRelatorio);
@@ -166,37 +171,50 @@ public class PrincipalUI extends javax.swing.JFrame {
        CadastrarMedicoUI cadastroMedicoUI = new CadastrarMedicoUI(null);
        cadastroMedicoUI.setVisible(true);
        jdpTelaSecundaria.add(cadastroMedicoUI);
+       cadastroMedicoUI.toFront();
     }//GEN-LAST:event_JMICadastroMedicoActionPerformed
 
     private void JMICadastroPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICadastroPacienteActionPerformed
        CadastrarPacienteUI cadastroPacienteUI =  new CadastrarPacienteUI(null);
        cadastroPacienteUI.setVisible(true);
        jdpTelaSecundaria.add(cadastroPacienteUI);
+       cadastroPacienteUI.toFront();
     }//GEN-LAST:event_JMICadastroPacienteActionPerformed
 
     private void JMICadastroConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICadastroConsultaActionPerformed
        CadastrarConsultaUI cadastroConsultaUI = new CadastrarConsultaUI(null);
        cadastroConsultaUI.setVisible(true);
        jdpTelaSecundaria.add(cadastroConsultaUI);
+       cadastroConsultaUI.toFront();
     }//GEN-LAST:event_JMICadastroConsultaActionPerformed
 
     private void JMIConsultaMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIConsultaMedicoActionPerformed
        ConsultarMedicoUI consultarMedico = new ConsultarMedicoUI();
        consultarMedico.setVisible(true);
        jdpTelaSecundaria.add(consultarMedico);
+       consultarMedico.toFront();
     }//GEN-LAST:event_JMIConsultaMedicoActionPerformed
 
     private void JMIConsultaPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIConsultaPacienteActionPerformed
        ConsultarPacienteUI consultarPaciente = new ConsultarPacienteUI();
        consultarPaciente.setVisible(true);
        jdpTelaSecundaria.add(consultarPaciente);
+       consultarPaciente.toFront();
     }//GEN-LAST:event_JMIConsultaPacienteActionPerformed
 
     private void JMIConsultaConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIConsultaConsultaActionPerformed
        ConsultarProntuarioUI consultarProntuario = new ConsultarProntuarioUI();
        consultarProntuario.setVisible(true);
        jdpTelaSecundaria.add(consultarProntuario);
+       consultarProntuario.toFront();
     }//GEN-LAST:event_JMIConsultaConsultaActionPerformed
+
+    private void JMIRelatorioConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIRelatorioConsultaActionPerformed
+       RelatorioPacienteUI relatorioPaciente = new RelatorioPacienteUI();
+       relatorioPaciente.setVisible(true);
+       jdpTelaSecundaria.add(relatorioPaciente);
+       relatorioPaciente.toFront();
+    }//GEN-LAST:event_JMIRelatorioConsultaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -239,8 +257,6 @@ public class PrincipalUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem JMIConsultaMedico;
     private javax.swing.JMenuItem JMIConsultaPaciente;
     private javax.swing.JMenuItem JMIRelatorioConsulta;
-    private javax.swing.JMenuItem JMIRelatorioMedico;
-    private javax.swing.JMenuItem JMIRelatorioPaciente;
     private javax.swing.JMenu JMRelatorio;
     private javax.swing.JMenu JMSair;
     private javax.swing.JMenuBar jMenuBar1;
