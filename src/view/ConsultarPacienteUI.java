@@ -8,6 +8,8 @@ package view;
 
 import controller.PacienteController;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Paciente;
@@ -22,13 +24,17 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
      * Creates new form ConsultarPaciente2
      */
     
-    private final List<Paciente> listaPaciente;
+    private List<Paciente> listaPaciente;
     private DefaultTableModel modelo;
     
     public ConsultarPacienteUI() {
         initComponents();
         
-        this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+        try {
+            this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+        } catch (Exception ex) {
+            Logger.getLogger(ConsultarPacienteUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.zerarModelo();
     }
 

@@ -7,7 +7,7 @@
 package controller;
 
 import dao.ProcedimentoDao;
-import java.util.ArrayList;
+import java.util.List;
 import model.Procedimento;
 
 /**
@@ -17,7 +17,6 @@ import model.Procedimento;
 public class ProcedimentoController {
     
     private static ProcedimentoController instanciaRep;
-    private ArrayList<Procedimento> listaProcedimento;
     
     public static ProcedimentoController obterInstancia(){
         if(instanciaRep == null){
@@ -26,11 +25,7 @@ public class ProcedimentoController {
         return instanciaRep;
     }
 
-    public ProcedimentoController() {
-        this.listaProcedimento = new ArrayList<>();
-    }
-     
-    public ArrayList<Procedimento> obterLista() {
+    public List<Procedimento> obterLista() throws Exception {
         return ProcedimentoDao.obterInstancia().obterLista();
     }
     

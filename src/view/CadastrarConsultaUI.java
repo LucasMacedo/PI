@@ -11,9 +11,12 @@ import controller.MedicoController;
 import controller.PacienteController;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Consulta;
@@ -29,19 +32,23 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
     /**
      * Creates new form CadastrarConsulta
      */
-    private final List<Paciente> listaPaciente;
-    private final List<Medico> listaMedico;
+    private List<Paciente> listaPaciente;
+    private List<Medico> listaMedico;
     private DefaultTableModel modelo, modeloMedico;
     private Consulta consultaAnt;
     
     public CadastrarConsultaUI(Consulta consulta) {
         initComponents();
         
-        this.zerarModeloMedico();
-        this.listaMedico = MedicoController.obterInstancia().listarMedico();
-        
-        this.zerarModeloPaciente();
-        this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+        try {
+            this.zerarModeloMedico();
+            this.listaMedico = MedicoController.obterInstancia().listarMedico();
+            
+            this.zerarModeloPaciente();
+            this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+        } catch (Exception ex) {
+            Logger.getLogger(CadastrarConsultaUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         if(consulta != null){
             consultaAnt = consulta;
@@ -572,5 +579,5 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
     private javax.swing.JTable JTabelaMedico;
     private javax.swing.JTable JTabelaPaciente;
     // End of variables declaration//GEN-END:variables
-    
+
 }

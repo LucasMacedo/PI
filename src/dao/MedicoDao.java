@@ -72,7 +72,7 @@ public class MedicoDao extends SqlHelper{
 
         sql.append("SELECT * FROM MEDICO M");
         sql.append("    INNER JOIN PESSOA P");
-        sql.append("        ON M.CODMEDICO = PE.CODIGO");
+        sql.append("        ON M.CODMEDICO = P.CODIGO");
 
         try {
             PreparedStatement st = getPreparedStatement(sql, NO_KEY);

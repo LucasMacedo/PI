@@ -12,6 +12,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Consulta;
@@ -249,9 +251,13 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
 
     private void JBListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBListarActionPerformed
         this.zerarModelo();
-        this.listaConsulta = ConsultaController.obterInstancia().listar();
-        this.listaMedico = MedicoController.obterInstancia().listarMedico();
-        this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+        try {
+            this.listaConsulta = ConsultaController.obterInstancia().listar();
+            this.listaMedico = MedicoController.obterInstancia().listarMedico();
+            this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+        } catch (Exception ex) {
+            Logger.getLogger(ConsultarProntuarioUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/YYYY");
 
         for (Consulta listaConsulta1 : this.listaConsulta) {
@@ -275,11 +281,11 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
 
     private void JBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBPesquisarActionPerformed
         this.zerarModelo();
-        this.listaConsulta = ConsultaController.obterInstancia().listar();
-        this.listaMedico = MedicoController.obterInstancia().listarMedico();
-        this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
-
+        
         try {
+            this.listaConsulta = ConsultaController.obterInstancia().listar();
+            this.listaMedico = MedicoController.obterInstancia().listarMedico();
+            this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
             JTListaConsultas.setModel(verificarFiltros(modelo));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erro: " + e.getMessage(), "ERRO", 0);

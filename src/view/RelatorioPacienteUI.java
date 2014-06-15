@@ -5,7 +5,9 @@
 package view;
 
 import controller.ProcedimentoController;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import model.Procedimento;
 
@@ -15,7 +17,7 @@ import model.Procedimento;
  */
 public class RelatorioPacienteUI extends javax.swing.JInternalFrame {
     
-    private ArrayList<Procedimento> listaProcedimento;
+    private List<Procedimento> listaProcedimento;
     /**
      * Creates new form RelatorioMedicoUI
      */
@@ -224,7 +226,11 @@ public class RelatorioPacienteUI extends javax.swing.JInternalFrame {
 
     private void ComboBox(){
         DefaultComboBoxModel modelo = new DefaultComboBoxModel();
-        this.listaProcedimento = ProcedimentoController.obterInstancia().obterLista();
+        try {
+            this.listaProcedimento = ProcedimentoController.obterInstancia().obterLista();
+        } catch (Exception ex) {
+            Logger.getLogger(RelatorioPacienteUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         for (Procedimento listaProcedimento1 : this.listaProcedimento) {
             modelo.addElement(listaProcedimento1.getDescricao());
         }

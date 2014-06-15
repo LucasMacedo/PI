@@ -9,6 +9,8 @@ package view;
 import controller.EspecialidadeController;
 import controller.MedicoController;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import model.Especialidade;
@@ -254,7 +256,11 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
 
     private void ComboBoxEspecialidade(){
         DefaultComboBoxModel modelo = new DefaultComboBoxModel();
-        this.listaEspecialidade = EspecialidadeController.obterInstancia().obterLista();
+        try {
+            this.listaEspecialidade = EspecialidadeController.obterInstancia().obterLista();
+        } catch (Exception ex) {
+            Logger.getLogger(CadastrarMedicoUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         for (Especialidade listaEspecialidade1 : this.listaEspecialidade) {
             modelo.addElement(listaEspecialidade1.getNome());
         }

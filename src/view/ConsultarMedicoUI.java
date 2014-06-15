@@ -9,6 +9,8 @@ package view;
 import controller.EspecialidadeController;
 import controller.MedicoController;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -25,14 +27,18 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
      * Creates new form ConsultarMedico
      */
     
-    private final List<Medico> listaMedico;
+    private  List<Medico> listaMedico;
     private List<Especialidade> listaEspecialidade;
     private DefaultTableModel modelo;
     
     public ConsultarMedicoUI() {
         initComponents();
         ComboBoxEspecialidade();
-        this.listaMedico = MedicoController.obterInstancia().listarMedico();
+        try {
+            this.listaMedico = MedicoController.obterInstancia().listarMedico();
+        } catch (Exception ex) {
+            Logger.getLogger(ConsultarMedicoUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.zerarModelo();
     }
 
@@ -268,7 +274,11 @@ public class ConsultarMedicoUI extends javax.swing.JInternalFrame {
 
     private void ComboBoxEspecialidade(){
         DefaultComboBoxModel modelo = new DefaultComboBoxModel();
-        this.listaEspecialidade = EspecialidadeController.obterInstancia().obterLista();
+        try {
+            this.listaEspecialidade = EspecialidadeController.obterInstancia().obterLista();
+        } catch (Exception ex) {
+            Logger.getLogger(ConsultarMedicoUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         for (Especialidade listaEspecialidade1 : this.listaEspecialidade) {
             modelo.addElement(listaEspecialidade1.getNome());
         }
