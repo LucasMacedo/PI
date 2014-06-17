@@ -29,7 +29,7 @@ public class ConsultaController {
         if(consulta.getObservacao().isEmpty()){
             throw new Exception("Observação esta invalido !");
         }
-        if(consulta.getProcedimento().isEmpty()){
+        if(consulta.getCodProcedimento() == 0){
             throw new Exception("Procedimento esta invalido !");
         }
         if(consulta.getData().equals("  /  /   ")){

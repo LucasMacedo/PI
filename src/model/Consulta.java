@@ -16,17 +16,19 @@ public class Consulta {
     
     private Date data;
     private String observacao;
+    private Integer codProcedimento;
     private String procedimento;
     
     private Integer codigo;
     private Integer codMedico;
     private Integer codPaciente;
 
-    public Consulta(Date data, String observacao, Integer codMedico, Integer codPaciente) {
+    public Consulta(Date data, String observacao, Integer codMedico, Integer codPaciente, Integer codProcedimento) {
         this.data = data;
         this.observacao = observacao;
         this.codMedico = codMedico;
         this.codPaciente = codPaciente;
+        this.codProcedimento = codProcedimento;
     }
 
     public Consulta() {
@@ -79,10 +81,13 @@ public class Consulta {
     public void setProcedimento(String procedimento) {
         this.procedimento = procedimento;
     }
-    
-    
 
-    
-    
+    public Integer getCodProcedimento() {
+        return codProcedimento;
+    }
+
+    public void setCodProcedimento(Integer codProcedimento) {
+        this.codProcedimento = codProcedimento;
+    }
     
 }

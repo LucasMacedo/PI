@@ -7,6 +7,7 @@
 package controller;
 
 import dao.ProcedimentoDao;
+import java.util.ArrayList;
 import java.util.List;
 import model.Procedimento;
 
@@ -26,7 +27,10 @@ public class ProcedimentoController {
     }
 
     public List<Procedimento> obterLista() throws Exception {
-        return ProcedimentoDao.obterInstancia().obterLista();
+        List<Procedimento> procedimentos = new ArrayList<>();
+        procedimentos.add(new Procedimento(0, "Selecione"));
+        procedimentos.addAll(ProcedimentoDao.obterInstancia().obterLista());
+        return procedimentos;
     }
     
     

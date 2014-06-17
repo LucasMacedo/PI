@@ -7,6 +7,7 @@
 package view;
 
 import javax.swing.JDesktopPane;
+import javax.swing.plaf.DesktopPaneUI;
 
 /**
  *
@@ -149,6 +150,11 @@ public class PrincipalUI extends javax.swing.JFrame {
         jMenuBar1.add(JMRelatorio);
 
         JMSair.setText("Sair");
+        JMSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JMSairActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(JMSair);
 
         setJMenuBar(jMenuBar1);
@@ -216,6 +222,10 @@ public class PrincipalUI extends javax.swing.JFrame {
        relatorioPaciente.toFront();
     }//GEN-LAST:event_JMIRelatorioConsultaActionPerformed
 
+    private void JMSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMSairActionPerformed
+       
+    }//GEN-LAST:event_JMSairActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -232,14 +242,19 @@ public class PrincipalUI extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(PrincipalUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(PrincipalUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(PrincipalUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(PrincipalUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
             public void run() {
                 obterInstancia().setVisible(true);
             }

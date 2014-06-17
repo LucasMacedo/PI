@@ -42,7 +42,7 @@ public class ProcedimentoDao extends SqlHelper{
             
             while(rs.next()){
                 Procedimento procedimento = new Procedimento(
-                        rs.getInt("CODIGO"),
+                        rs.getInt("CODPROCEDIMENTO"),
                         rs.getString("DESCRICAO")
                 );
                 procedimentos.add(procedimento);

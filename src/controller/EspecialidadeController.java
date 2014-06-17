@@ -7,7 +7,7 @@
 package controller;
 
 import dao.EspecialidadeDao;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import model.Especialidade;
 
@@ -31,7 +31,10 @@ public class EspecialidadeController {
     }
     
     public List<Especialidade> obterLista() throws Exception{
-        return EspecialidadeDao.obterInstancia().listar();
+        List<Especialidade> especialidades = new ArrayList<>();
+        especialidades.add(new Especialidade(0, "Selecione"));
+        especialidades.addAll(EspecialidadeDao.obterInstancia().listar());
+        return especialidades;
     }
     
 }

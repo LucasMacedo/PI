@@ -32,15 +32,15 @@ public class ConsultaDao extends SqlHelper{
     
     public void incluir(Consulta consulta) throws SQLException{
         StringBuilder sql = new StringBuilder();
-        sql.append("INSERT INTO CONSULTA VALUES (?,?,?,?,?)");
+        sql.append("INSERT INTO CONSULTA(DATA,OBSERVACAO,CODMEDICO,CODPACIENTE,CODPROCEDIMENTO) VALUES (?,?,?,?)");
         
         try {
-            PreparedStatement st = getPreparedStatement(sql, NO_KEY);
-            st.setInt(1, consulta.getCodigo());
-            st.setDate(2, new Date(consulta.getData().getTime()));
-            st.setString(3, consulta.getObservacao());
-            st.setInt(4, consulta.getCodMedico());
-            st.setInt(5, consulta.getCodPaciente());
+            PreparedStatement st = getPreparedStatement(sql, RETURN_KEY);
+            st.setDate(1, new Date(consulta.getData().getTime()));
+            st.setString(2, consulta.getObservacao());
+            st.setInt(3, consulta.getCodMedico());
+            st.setInt(4, consulta.getCodPaciente());
+            st.setInt(5, consulta.getCodProcedimento());
             
             st.executeUpdate();
         } catch (SQLException ex) {

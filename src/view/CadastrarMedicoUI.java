@@ -94,6 +94,9 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
 
         JLEspecialidade.setText("Especialidade:");
 
+        JCBEspecialidade.setToolTipText("");
+        JCBEspecialidade.setName(""); // NOI18N
+
         JLTelefone.setText("Telefone :");
 
         try {

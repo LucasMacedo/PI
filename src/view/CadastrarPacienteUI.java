@@ -19,7 +19,6 @@ public class CadastrarPacienteUI extends javax.swing.JInternalFrame {
     private Paciente pacienteAnt;
     /**
      * Creates new form CadastroPaciente
-     * @param paciente
      */
     public CadastrarPacienteUI(Paciente paciente) {
         initComponents();
