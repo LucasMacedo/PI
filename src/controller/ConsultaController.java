@@ -3,6 +3,7 @@ package controller;
 import dao.ConsultaDao;
 import java.util.List;
 import model.Consulta;
+import model.Consulta_Paciente;
 
 /**
  *
@@ -61,5 +62,9 @@ public class ConsultaController {
         }
         
         ConsultaDao.obterInstancia().alterar(consultaAnt);
+    }
+
+    public List<Consulta_Paciente> listarEspecial() throws Exception {
+        return ConsultaDao.obterInstancia().listarEspecial();
     }
 }

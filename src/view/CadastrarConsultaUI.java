@@ -66,7 +66,7 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
             JTAObservacao.setText(consulta.getObservacao());
             
             for (Medico listaMedico1 : this.listaMedico) {
-                if (consulta.getCodMedico().equals(listaMedico1.getCrm())) {
+                if (consulta.getCodMedico().equals(listaMedico1.getCodigo())) {
                     modeloMedico.addRow(new Object[]{listaMedico1.getCrm(), listaMedico1.getNome()});
                 }
             }
@@ -435,7 +435,7 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
                 int linhaMedico = JTabelaMedico.getSelectedRow();
                 int linhaPaciente = JTabelaPaciente.getSelectedRow();
                 try{
-                    consultaAnt.setCodMedico((int) modeloMedico.getValueAt(linhaMedico,0));
+                    consultaAnt.setCodMedico( this.verificaMedico((int) modeloMedico.getValueAt(linhaMedico,0)));
                     consultaAnt.setCodPaciente((int) modelo.getValueAt(linhaPaciente,0));
                     consultaAnt.setCodProcedimento(JCBProcedimento.getSelectedIndex());
                 }catch(Exception e){
@@ -463,7 +463,7 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
 
                // Obtem os dados pela linha selecionada
                 try{
-                    consulta.setCodMedico((int) modeloMedico.getValueAt(linhaMedico,0));
+                    consulta.setCodMedico(this.verificaMedico((int) modeloMedico.getValueAt(linhaMedico,0)));
                     consulta.setCodPaciente((int) modelo.getValueAt(linhaPaciente,0));
                     consulta.setCodProcedimento(JCBProcedimento.getSelectedIndex());
                 }catch(Exception e){
@@ -591,6 +591,16 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
         modeloMedico = new DefaultTableModel();
         modeloMedico.setColumnIdentifiers(new String[] {"CRM","Nome"});
     }
+    
+    private Integer verificaMedico(Integer crm){
+        for(int i=0; i < this.listaMedico.size();i++){
+            if(this.listaMedico.get(i).getCrm().equals(crm)){
+                return this.listaMedico.get(i).getCodigo();
+            }
+        }
+        return null;
+    }
+   
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBCancelar;

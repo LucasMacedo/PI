@@ -275,7 +275,7 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
         for (Consulta listaConsulta1 : this.listaConsulta) {
             String nomeMedico = null, nomePaciente = null;
            for (Medico listaMedico1 : this.listaMedico) {
-               if (listaConsulta1.getCodMedico().equals(listaMedico1.getCrm())) {
+               if (listaConsulta1.getCodMedico().equals(listaMedico1.getCodigo())) {
                    nomeMedico = listaMedico1.getNome();
                }
            }
@@ -352,7 +352,7 @@ public class ConsultarProntuarioUI extends javax.swing.JInternalFrame {
             String nomeMedico = "", nomePaciente = "";
             // for para pegar o nome do medico de acordo com o codMedico
             for (Medico listaMedico1 : this.listaMedico) {
-                if (listaConsulta1.getCodMedico().equals(listaMedico1.getCrm())) {
+                if (listaConsulta1.getCodMedico().equals(listaMedico1.getCodigo())) {
                     nomeMedico = listaMedico1.getNome();
                 }
             }

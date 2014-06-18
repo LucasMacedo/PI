@@ -40,6 +40,7 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
             JTFCRM.setText(medicoAnt.getCrm().toString());
             JCBEspecialidade.setSelectedIndex(medicoAnt.getCodigoEspecialidade());
             jFTelefone.setText(medicoAnt.getTelefone());
+            JTEmail.setText(medicoAnt.getEmail());
             JTFEndereco.setText(medicoAnt.getEndereco()); 
             
             JTFCRM.setEditable(false);
@@ -231,6 +232,7 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
                 medicoAnt.setNome(JTFNome.getText());
                 medicoAnt.setCodigoEspecialidade(JCBEspecialidade.getSelectedIndex());
                 medicoAnt.setTelefone(jFTelefone.getText());
+                medicoAnt.setEmail(JTEmail.getText());
                 medicoAnt.setEndereco(JTFEndereco.getText());
                 MedicoController.obterInstancia().alterar(medicoAnt);
                 JOptionPane.showMessageDialog(this, "Editado com Sucesso");
@@ -241,6 +243,7 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
                 medico.setCrm(Integer.parseInt(JTFCRM.getText()));
                 medico.setCodigoEspecialidade(JCBEspecialidade.getSelectedIndex());
                 medico.setTelefone(jFTelefone.getText());
+                medico.setEmail(JTEmail.getText());
                 medico.setEndereco(JTFEndereco.getText());
                 MedicoController.obterInstancia().cadastar(medico);
                 JOptionPane.showMessageDialog(this, "Cadastrado com sucesso !");
@@ -264,6 +267,7 @@ public class CadastrarMedicoUI extends javax.swing.JInternalFrame {
         } catch (Exception ex) {
             Logger.getLogger(CadastrarMedicoUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         for (Especialidade listaEspecialidade1 : this.listaEspecialidade) {
             modelo.addElement(listaEspecialidade1.getNome());
         }

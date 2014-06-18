@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Consulta;
+import model.Consulta_Paciente;
 import util.SqlHelper;
 
 /**
@@ -32,7 +33,7 @@ public class ConsultaDao extends SqlHelper{
     
     public void incluir(Consulta consulta) throws SQLException{
         StringBuilder sql = new StringBuilder();
-        sql.append("INSERT INTO CONSULTA(DATA,OBSERVACAO,CODMEDICO,CODPACIENTE,CODPROCEDIMENTO) VALUES (?,?,?,?)");
+        sql.append("INSERT INTO CONSULTA(DATA,OBSERVACAO,CODMEDICO,CODPACIENTE,CODPROCEDIMENTO) VALUES (?,?,?,?,?)");
         
         try {
             PreparedStatement st = getPreparedStatement(sql, RETURN_KEY);
@@ -68,6 +69,7 @@ public class ConsultaDao extends SqlHelper{
                 consulta.setCodigo(rs.getInt("CODIGO"));
                 consulta.setData(rs.getDate("DATA"));
                 consulta.setObservacao(rs.getString("OBSERVACAO"));
+                consulta.setCodProcedimento(rs.getInt("CODPROCEDIMENTO"));
                 consultas.add(consulta);
             }
         } catch (SQLException ex) {
@@ -79,6 +81,34 @@ public class ConsultaDao extends SqlHelper{
 
     public void alterar(Consulta consultaAnt) {
         
+    }
+    
+    public List<Consulta_Paciente> listarEspecial() throws SQLException{
+        List<Consulta_Paciente> consultas = new ArrayList<>();
+        
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT consulta.codigo, pessoa.codigo , pessoa.nome, pessoa.cpf, consulta.codProcedimento, consulta.data FROM consulta, pessoa "+
+                   "WHERE consulta.codPaciente = pessoa.codigo");
+        
+        try {
+            PreparedStatement st = getPreparedStatement(sql, NO_KEY);
+            ResultSet rs = st.executeQuery();
+            
+            while(rs.next()){
+                Consulta_Paciente consulta = new Consulta_Paciente();
+                consulta.setConsultaCodigo(rs.getInt("CONSULTA.CODIGO"));
+                consulta.setPacienteCodigo(rs.getInt("PESSOA.CODIGO"));
+                consulta.setPacienteNome(rs.getString("PESSOA.NOME"));
+                consulta.setPacienteCPF(rs.getString("PESSOA.CPF"));
+                consulta.setCodProcedimento(rs.getInt("CONSULTA.CODPROCEDIMENTO"));
+                consulta.setConsultaData(rs.getDate("CONSULTA.DATA"));
+                consultas.add(consulta);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConsultaDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+        return consultas;
     }
     
     

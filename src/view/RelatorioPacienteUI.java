@@ -4,11 +4,21 @@
  */
 package view;
 
+import controller.ConsultaController;
+import controller.PacienteController;
 import controller.ProcedimentoController;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import model.Consulta;
+import model.Consulta_Paciente;
+import model.Paciente;
 import model.Procedimento;
 
 /**
@@ -16,14 +26,22 @@ import model.Procedimento;
  * @author alexsandro_cota
  */
 public class RelatorioPacienteUI extends javax.swing.JInternalFrame {
-    
+
     private List<Procedimento> listaProcedimento;
+    private List<Consulta_Paciente> listaConsulta;
+    private DefaultTableModel modelo;
+
     /**
      * Creates new form RelatorioMedicoUI
      */
     public RelatorioPacienteUI() {
         initComponents();
         ComboBox();
+        try {
+            this.listaConsulta = ConsultaController.obterInstancia().listarEspecial();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "ERRO: Lista - " + ex.getMessage());
+        }
     }
 
     /**
@@ -221,26 +239,123 @@ public class RelatorioPacienteUI extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_JBExportarActionPerformed
 
     private void JBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBPesquisarActionPerformed
-        // TODO add your handling code here:
+        this.zerarModelo();
+        try {
+            JTabelaPaciente.setModel(this.verificaFiltros(modelo));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage(), "ERRO", 0);
+        }
     }//GEN-LAST:event_JBPesquisarActionPerformed
 
-    private void ComboBox(){
-        DefaultComboBoxModel modelo = new DefaultComboBoxModel();
+    private void ComboBox() {
+        DefaultComboBoxModel modeloComboBox = new DefaultComboBoxModel();
         try {
             this.listaProcedimento = ProcedimentoController.obterInstancia().obterLista();
         } catch (Exception ex) {
             Logger.getLogger(RelatorioPacienteUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         for (Procedimento listaProcedimento1 : this.listaProcedimento) {
-            modelo.addElement(listaProcedimento1.getDescricao());
+            modeloComboBox.addElement(listaProcedimento1.getDescricao());
         }
-        JCBProcedimento.setModel(modelo);
+        JCBProcedimento.setModel(modeloComboBox);
     }
-    
-    private void verificaFiltros(){
+
+    private DefaultTableModel verificaFiltros(DefaultTableModel modelo) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+        try{
+            Date dataInicio = sdf.parse(JFTDataInicio.getText());
+            Date dataFim = sdf.parse(JFTDataFim.getText());
+        }catch(Exception ex){
+            throw new Exception("Data");
+        }
         
+        String nome = JTFPaciente.getText();
+        String cpf = JFTFCpf.getText();
+        Integer index = JCBProcedimento.getSelectedIndex();
+        
+      
+        if (cpf.equals("   .   .   -  ")) {
+            cpf = null;
+        }
+        
+
+        for (int i = 0; i < this.listaConsulta.size(); i++) {
+
+            if (nome.isEmpty() && cpf == null && index == 0) {
+                modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
+                    this.listaConsulta.get(i).getPacienteNome()});
+            } else if (!nome.isEmpty()) {
+                if (cpf == null && index == 0) {
+                    if (this.listaConsulta.get(i).getPacienteNome().equals(nome)) {
+                        modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
+                            this.listaConsulta.get(i).getPacienteNome()});
+                    } else {
+                        throw new Exception("Nenhuma consulta cadastrado com esse paciente");
+                    }
+                } else if (cpf != null && index == 0) {
+                    if (this.listaConsulta.get(i).getPacienteNome().equals(nome)
+                            && this.listaConsulta.get(i).getPacienteCPF().equals(cpf)) {
+                        modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
+                            this.listaConsulta.get(i).getPacienteNome()});
+                    } else {
+                        throw new Exception("Nome e CPF não conferem");
+                    }
+                } else if (cpf == null && index != 0) {
+                    if (this.listaConsulta.get(i).getPacienteNome().equals(nome)
+                            && this.listaConsulta.get(i).getCodProcedimento().equals(index)) {
+                        modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
+                            this.listaConsulta.get(i).getPacienteNome()});
+                    } else {
+                        throw new Exception("O Nome selecionado não fez esse Procedimento");
+                    }
+                } else if (cpf != null && index != 0) {
+                    if (this.listaConsulta.get(i).getPacienteNome().equals(nome)
+                            && this.listaConsulta.get(i).getPacienteCPF().equals(cpf)
+                            && this.listaConsulta.get(i).getCodProcedimento().equals(index)) {
+                        modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
+                            this.listaConsulta.get(i).getPacienteNome()});
+                    } else {
+                        throw new Exception("Os dados não conferem");
+                    }
+                }
+            } else if (cpf != null) {
+                if (index == 0) {
+                    if (this.listaConsulta.get(i).getPacienteCPF().equals(cpf)) {
+                        modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
+                            this.listaConsulta.get(i).getPacienteNome()});
+                    }
+                } else if (index != 0) {
+                    if (this.listaConsulta.get(i).getPacienteCPF().equals(cpf)
+                            && this.listaConsulta.get(i).getCodProcedimento().equals(index)) {
+                        modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
+                            this.listaConsulta.get(i).getPacienteNome()});
+                    } else {
+                        throw new Exception("O Paciente com esse CPF não fez esse Procedimento");
+                    }
+                }
+            } else if (index != 0) {
+                if (this.listaConsulta.get(i).getCodProcedimento().equals(index)) {
+                    modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
+                        this.listaConsulta.get(i).getPacienteNome()});
+                } else {
+                    throw new Exception("Nenhum Paciente fez esse procedimento");
+                }
+            }
+
+        }
+        
+        if(modelo.getRowCount() != 0){
+             return modelo;
+        } else {
+            throw new Exception("Nenhum dado cadastrado");
+        }
+   }
+
+    private void zerarModelo() {
+        modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(new String[]{"Codigo", "Nome"});
     }
-    
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBExportar;
     private javax.swing.JButton JBPesquisar;
@@ -258,4 +373,6 @@ public class RelatorioPacienteUI extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    
 }
