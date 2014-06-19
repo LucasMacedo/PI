@@ -9,6 +9,8 @@ package controller;
 import dao.MedicoDao;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Medico;
 
 /**
@@ -18,7 +20,7 @@ import model.Medico;
 public class MedicoController {
     
     private static MedicoController instanciaRep;
-    
+    private List<Medico> listaMedico;
     
     public static MedicoController obterInstancia(){
         if(instanciaRep == null){
@@ -35,11 +37,14 @@ public class MedicoController {
         }
         if(medico.getCpf().equals("   .   .   -  ")){
             throw new Exception("CPF Invalido !!");
+        }else{
+            this.verificaCPF(medico.getCpf());
         }
         if(medico.getCrm() == null){
             throw new Exception("CRM Invalido !!");
+        }else{
+            this.verificaCRM(medico.getCrm());
         }
-        
         if(medico.getCodigoEspecialidade().equals(0)){
             throw new Exception("Especialidade Invalido !!");
         }
@@ -65,10 +70,15 @@ public class MedicoController {
         }
         if(medicoAnt.getCpf().equals("   .   .   -  ")){
             throw new Exception("CPF Invalido !!");
+        }else{
+            this.verificaCPF(medicoAnt.getCpf());
         }
         if(medicoAnt.getCrm() == null){
             throw new Exception("CRM Invalido !!");
+        }else{
+            this.verificaCRM(medicoAnt.getCrm());
         }
+           
         if(medicoAnt.getCodigoEspecialidade().equals(0)){
             throw new Exception("Especialidade Invalido !!");
         }
@@ -88,6 +98,38 @@ public class MedicoController {
                      throw new Exception("Contem numero no nome");
                 }
           }
+    }
+    
+    private void verificaCRM(Integer crm) throws Exception{
+        try {
+            listaMedico = MedicoDao.obterInstancia().obterLista();
+        } catch (SQLException ex) {
+            Logger.getLogger(MedicoController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        for(int i=0; i< this.listaMedico.size();i++){
+            if(this.listaMedico.get(i).getCrm().equals(crm)){
+                throw new Exception("CRM Invalido !! CRM já existe");
+            }
+        }
+    }
+    
+    private void verificaCPF(String cpf) throws Exception{
+        try {
+            listaMedico = MedicoDao.obterInstancia().obterLista();
+        } catch (SQLException ex) {
+            Logger.getLogger(MedicoController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        for(int i=0; i< this.listaMedico.size();i++){
+            if(this.listaMedico.get(i).getCpf().equals(cpf)){
+                throw new Exception("CPF Invalido !! CPF já existe");
+            }
+        }
+    }
+
+    public void remover(Integer codigo) throws Exception {
+        MedicoDao.obterInstancia().remover(codigo);
     }
 
    

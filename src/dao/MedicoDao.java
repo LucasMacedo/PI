@@ -73,6 +73,7 @@ public class MedicoDao extends SqlHelper{
         sql.append("SELECT * FROM MEDICO M");
         sql.append("    INNER JOIN PESSOA P");
         sql.append("        ON M.CODMEDICO = P.CODIGO");
+        sql.append("            WHERE estado = 'Ativo'");
 
         try {
             PreparedStatement st = getPreparedStatement(sql, NO_KEY);
@@ -124,6 +125,24 @@ public class MedicoDao extends SqlHelper{
             throw ex;
         } finally {
            ConnectionManager.closeConnection();
+        }
+    }
+
+    public void remover(Integer codigo) throws SQLException {
+        try{
+            StringBuilder sql = new StringBuilder();
+            sql.append("UPDATE pessoa SET estado = 'Inativo' ");
+            sql.append("WHERE codigo = ?");
+            
+            PreparedStatement st = getPreparedStatement(sql, NO_KEY);
+            st.setInt(1, codigo);
+            
+            st.executeUpdate();
+        }catch(SQLException ex){
+            Logger.getLogger(MedicoDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }finally{
+            ConnectionManager.closeConnection();
         }
     }
     

@@ -57,6 +57,7 @@ public class ConsultaDao extends SqlHelper{
         
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT * FROM CONSULTA");
+        sql.append("    WHERE estado = 'Ativo' ");
         
         try {
             PreparedStatement st = getPreparedStatement(sql, NO_KEY);
@@ -87,21 +88,22 @@ public class ConsultaDao extends SqlHelper{
         List<Consulta_Paciente> consultas = new ArrayList<>();
         
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT consulta.codigo, pessoa.codigo , pessoa.nome, pessoa.cpf, consulta.codProcedimento, consulta.data FROM consulta, pessoa "+
-                   "WHERE consulta.codPaciente = pessoa.codigo");
-        
+        sql.append("SELECT * FROM CONSULTA C");
+        sql.append("    INNER JOIN PESSOA PE");
+        sql.append("        ON C.CODPACIENTE = PE.CODIGO");
+        sql.append("            GROUP BY C.CODPACIENTE");
         try {
             PreparedStatement st = getPreparedStatement(sql, NO_KEY);
             ResultSet rs = st.executeQuery();
             
             while(rs.next()){
                 Consulta_Paciente consulta = new Consulta_Paciente();
-                consulta.setConsultaCodigo(rs.getInt("CONSULTA.CODIGO"));
-                consulta.setPacienteCodigo(rs.getInt("PESSOA.CODIGO"));
-                consulta.setPacienteNome(rs.getString("PESSOA.NOME"));
-                consulta.setPacienteCPF(rs.getString("PESSOA.CPF"));
-                consulta.setCodProcedimento(rs.getInt("CONSULTA.CODPROCEDIMENTO"));
-                consulta.setConsultaData(rs.getDate("CONSULTA.DATA"));
+                consulta.setConsultaCodigo(rs.getInt("C.CODIGO"));
+                consulta.setPacienteCodigo(rs.getInt("PE.CODIGO"));
+                consulta.setPacienteNome(rs.getString("PE.NOME"));
+                consulta.setPacienteCPF(rs.getString("PE.CPF"));
+                consulta.setCodProcedimento(rs.getInt("C.CODPROCEDIMENTO"));
+                consulta.setConsultaData(rs.getDate("C.DATA"));
                 consultas.add(consulta);
             }
         } catch (SQLException ex) {
@@ -110,6 +112,88 @@ public class ConsultaDao extends SqlHelper{
         }
         return consultas;
     }
+    
+    public List<Consulta_Paciente> listarData(java.util.Date dtInicio,java.util.Date dtFim) throws SQLException{
+        List<Consulta_Paciente> consultas = new ArrayList<>();
+        
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT * FROM CONSULTA C");
+        sql.append("    INNER JOIN PESSOA PE");
+        sql.append("        ON C.CODPACIENTE = PE.CODIGO");
+        sql.append("          WHERE C.DATA >= ? AND C.DATA <= ?   ");
+        try {
+            PreparedStatement st = getPreparedStatement(sql, NO_KEY);
+            st.setDate(1, new Date(dtInicio.getTime()));
+            st.setDate(2, new Date(dtFim.getTime()));
+            ResultSet rs = st.executeQuery();
+            
+            while(rs.next()){
+                Consulta_Paciente consulta = new Consulta_Paciente();
+                consulta.setConsultaCodigo(rs.getInt("C.CODIGO"));
+                consulta.setPacienteCodigo(rs.getInt("PE.CODIGO"));
+                consulta.setPacienteNome(rs.getString("PE.NOME"));
+                consulta.setPacienteCPF(rs.getString("PE.CPF"));
+                consulta.setCodProcedimento(rs.getInt("C.CODPROCEDIMENTO"));
+                consulta.setConsultaData(rs.getDate("C.DATA"));
+                consultas.add(consulta);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ConsultaDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+        return consultas;
+    }
+
+    public List<Consulta> listarConsultaData(java.util.Date dtInicio, java.util.Date dtFim) throws SQLException {
+        List<Consulta> consultas = new ArrayList<>();
+        
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT * FROM CONSULTA C");
+        sql.append("    INNER JOIN PESSOA PE");
+        sql.append("        ON C.CODPACIENTE = PE.CODIGO");
+        sql.append("          WHERE C.DATA >= ? AND C.DATA <= ?   ");
+        try {
+            PreparedStatement st = getPreparedStatement(sql, NO_KEY);
+            st.setDate(1, new Date(dtInicio.getTime()));
+            st.setDate(2, new Date(dtFim.getTime()));
+            ResultSet rs = st.executeQuery();
+            
+            while(rs.next()){
+                Consulta consulta = new Consulta();
+                consulta.setCodMedico(rs.getInt("CODMEDICO"));
+                consulta.setCodPaciente(rs.getInt("CODPACIENTE"));
+                consulta.setCodigo(rs.getInt("CODIGO"));
+                consulta.setData(rs.getDate("DATA"));
+                consulta.setObservacao(rs.getString("OBSERVACAO"));
+                consulta.setCodProcedimento(rs.getInt("CODPROCEDIMENTO"));
+                consultas.add(consulta);
+            }        
+        } catch (SQLException ex) {
+            Logger.getLogger(ConsultaDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+        return consultas;
+    }
+
+    public void remover(Integer codigo) throws SQLException {
+        try {
+            StringBuilder sql = new StringBuilder();
+            sql.append("UPDATE consulta SET estado = 'Inativo' ");
+            sql.append("WHERE codigo = ?");
+            
+            PreparedStatement st = getPreparedStatement(sql, NO_KEY);
+            st.setInt(1, codigo);
+            st.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ConsultaDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }finally{
+            ConnectionManager.closeConnection();
+        }
+    }
+
+   
     
     
 }

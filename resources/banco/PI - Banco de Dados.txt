@@ -1,0 +1,53 @@
+create database projetoIntegrador;
+
+use projetoIntegrador;
+
+create table pessoa (
+	codigo integer not null,
+	nome varchar(45) not null,
+	endereco varchar(200) not null,
+	email varchar (45) not null,
+	telefone integer not null,
+primary key (codigo));
+
+create table paciente(
+	codPaciente integer not null,
+primary key (codPaciente),
+foreign key codPaciente References pessoa(codigo));
+
+create table especialidade (
+	codigo integer not null,
+	nome varchar(45) not null,
+primary key (codigo));
+
+
+create table medico (
+	codMedico integer not null,
+	crm integer not null unique,
+	codEspecialidade integer not null,
+primary key (codMedico),
+foreign key codMedico references pessoa(codigo),
+foreign key codEspecialidade references especialidade(codigo));
+
+create table consulta (
+	prontuario integer not null,
+	data Date not null,
+	observacao varchar(2000) not null,
+	codMedico integer not null,
+	codPaciente integer not null,
+primary key (prontuario),
+foreign key codMedico references medico (codigo),
+foreign key codPaciente references paciente(codigo));
+
+create table procedimento (
+	codProcedimento integer not null,
+	descricao varchar(45),
+primary key (codProcedimento));
+
+
+create table consultaProcedimento(
+	codConsulta integer not null,
+	codProcedimento integer not null,
+primary key (codConsulta, codProcedimento),
+foreign key codConsulta references consulta(prontuario),
+foreign key codProcedimento references procedimento (codProcedimento));

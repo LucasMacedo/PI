@@ -70,6 +70,7 @@ public class PacienteDao extends SqlHelper{
         sql.append("SELECT * FROM PACIENTE P");
         sql.append("    INNER JOIN PESSOA PE");
         sql.append("        ON P.CODPACIENTE = PE.CODIGO");
+        sql.append("            WHERE estado = 'Ativo'");
 
         try {
             PreparedStatement st = getPreparedStatement(sql, NO_KEY);
@@ -109,6 +110,24 @@ public class PacienteDao extends SqlHelper{
             Logger.getLogger(PacienteDao.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
         } finally {
+            ConnectionManager.closeConnection();
+        }
+    }
+    
+    public void remover(Integer codigo) throws SQLException{
+        try{
+            StringBuilder sql = new StringBuilder();
+            sql.append("UPDATE pessoa SET estado = 'Inativo' ");
+            sql.append("WHERE codigo = ?");
+            
+            PreparedStatement st = getPreparedStatement(sql, NO_KEY);
+            st.setInt(1, codigo);
+            
+            st.executeUpdate();
+        }catch(SQLException ex){
+            Logger.getLogger(PacienteDao.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }finally{
             ConnectionManager.closeConnection();
         }
     }

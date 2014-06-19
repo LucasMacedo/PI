@@ -1,6 +1,8 @@
 package controller;
 
 import dao.ConsultaDao;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import model.Consulta;
 import model.Consulta_Paciente;
@@ -67,4 +69,18 @@ public class ConsultaController {
     public List<Consulta_Paciente> listarEspecial() throws Exception {
         return ConsultaDao.obterInstancia().listarEspecial();
     }
+
+    public List<Consulta_Paciente> listarRelatorioData(Date dataInicio, Date dataFim) throws Exception {
+        return ConsultaDao.obterInstancia().listarData(dataInicio, dataFim);
+    }
+
+    public List<Consulta> listarConsultaData(Date dataInicio, Date dataFim) throws Exception {
+        return ConsultaDao.obterInstancia().listarConsultaData(dataInicio,dataFim);
+    }
+
+    public void remover(Integer codigo) throws SQLException {
+        ConsultaDao.obterInstancia().remover(codigo);
+    }
+
+   
 }

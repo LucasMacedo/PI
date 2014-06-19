@@ -30,11 +30,7 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
     public ConsultarPacienteUI() {
         initComponents();
     
-        try {
-            this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
-        } catch (Exception ex) {
-            Logger.getLogger(ConsultarPacienteUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.zerarLista();
         this.zerarModelo();
     }
 
@@ -99,12 +95,14 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
         });
         JTListaPaciente.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(JTListaPaciente);
-        JTListaPaciente.getColumnModel().getColumn(0).setMinWidth(70);
-        JTListaPaciente.getColumnModel().getColumn(0).setMaxWidth(170);
-        JTListaPaciente.getColumnModel().getColumn(1).setMinWidth(250);
-        JTListaPaciente.getColumnModel().getColumn(1).setMaxWidth(350);
-        JTListaPaciente.getColumnModel().getColumn(2).setMinWidth(100);
-        JTListaPaciente.getColumnModel().getColumn(2).setMaxWidth(200);
+        if (JTListaPaciente.getColumnModel().getColumnCount() > 0) {
+            JTListaPaciente.getColumnModel().getColumn(0).setMinWidth(70);
+            JTListaPaciente.getColumnModel().getColumn(0).setMaxWidth(170);
+            JTListaPaciente.getColumnModel().getColumn(1).setMinWidth(250);
+            JTListaPaciente.getColumnModel().getColumn(1).setMaxWidth(350);
+            JTListaPaciente.getColumnModel().getColumn(2).setMinWidth(100);
+            JTListaPaciente.getColumnModel().getColumn(2).setMaxWidth(200);
+        }
 
         JBListar.setText("Listar");
         JBListar.addActionListener(new java.awt.event.ActionListener() {
@@ -128,6 +126,11 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
         });
 
         JBRemover.setText("Remover");
+        JBRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBRemoverActionPerformed(evt);
+            }
+        });
 
         JBPesquisar.setText("Pesquisar");
         JBPesquisar.addActionListener(new java.awt.event.ActionListener() {
@@ -265,8 +268,32 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
             JTListaPaciente.setModel(verificarFiltros(modelo));
         }catch(Exception e){
             JOptionPane.showMessageDialog(this,"Erro: "+e.getMessage(),"ERRO",0);
-        }                                           
+        } 
     }//GEN-LAST:event_JBPesquisarActionPerformed
+
+    private void JBRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBRemoverActionPerformed
+        this.zerarModelo();
+        int codigo;      
+        try{
+            int index = JTListaPaciente.getSelectedRow();
+            if(index >= 0){
+                codigo = (int) JTListaPaciente.getValueAt(index,0);
+            }else{
+                throw new Exception("Nenhum paciente foi selecionado");
+            }
+            for (Paciente listaPaciente1 : this.listaPaciente) {
+                if (codigo == listaPaciente1.getCodigo()) {
+                   PacienteController.obterInstancia().remover(listaPaciente1.getCodigo());
+                }
+            }
+            
+            JOptionPane.showMessageDialog(this, "Removido com sucesso !");
+            this.zerarLista();
+            this.zerarModelo();
+        }catch(Exception ex){
+             JOptionPane.showMessageDialog(this, ex.getMessage());
+        }     
+    }//GEN-LAST:event_JBRemoverActionPerformed
 
     public DefaultTableModel verificarFiltros(DefaultTableModel modelo) throws Exception{
         String nome = JTFNome.getText();
@@ -284,54 +311,77 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
             cpf = null;
         }
 
-        for (Paciente listaPaciente1 : this.listaPaciente) {
-            if (codigo != null && !nome.isEmpty() && cpf != null) {
-                if (listaPaciente1.getCodigo().equals(codigo) && listaPaciente1.getNome().equals(nome) && listaPaciente1.getCpf().equals(cpf)) {
-                    modelo.addRow(new Object[]{listaPaciente1.getCodigo(), listaPaciente1.getNome(), listaPaciente1.getCpf()});
-                } else if (listaPaciente1.getCodigo().equals(codigo) && !listaPaciente1.getNome().equals(nome)) {
-                    if (listaPaciente1.getCpf().equals(cpf)) {
-                        throw new Exception("Dados Incorretos !! O nome esta Incorreto");
-                    } else if (!listaPaciente1.getCpf().equals(cpf)) {
-                        throw new Exception("Dados Incorretos !! O nome e o cpf esta Incorretos");
+        for (int i=0 ; i < this.listaPaciente.size(); i++) {
+            if(nome.isEmpty() && cpf == null && codigo == null){
+                modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                            this.listaPaciente.get(i).getNome(),
+                                            this.listaPaciente.get(i).getCpf()});
+            }else
+            if(!nome.isEmpty()){
+                if(cpf == null && codigo == null){
+                    if(this.listaPaciente.get(i).getNome().contains(nome)){
+                      modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                            this.listaPaciente.get(i).getNome(),
+                                            this.listaPaciente.get(i).getCpf()});  
+                    }
+                }else
+                if(cpf != null && codigo == null){
+                    if(this.listaPaciente.get(i).getNome().contains(nome) &&
+                            this.listaPaciente.get(i).getCpf().equals(cpf)){
+                        modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                            this.listaPaciente.get(i).getNome(),
+                                            this.listaPaciente.get(i).getCpf()});
+                    }
+                }else
+                if(cpf == null && codigo != null){
+                    if(this.listaPaciente.get(i).getCodigo().equals(codigo) &&
+                            this.listaPaciente.get(i).getNome().contains(nome)){
+                        modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                            this.listaPaciente.get(i).getNome(),
+                                            this.listaPaciente.get(i).getCpf()});
+                    }
+                }else
+                if(cpf != null && codigo != null){
+                    if(this.listaPaciente.get(i).getNome().contains(nome) &&
+                            this.listaPaciente.get(i).getCpf().equals(cpf) &&
+                                this.listaPaciente.get(i).getCodigo().equals(codigo)){
+                        modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                            this.listaPaciente.get(i).getNome(),
+                                            this.listaPaciente.get(i).getCpf()});
                     }
                 }
-            } else if (codigo == null && !nome.isEmpty() && cpf != null) {
-                if (listaPaciente1.getNome().equals(nome) && listaPaciente1.getCpf().equals(cpf)) {
-                    modelo.addRow(new Object[]{listaPaciente1.getCodigo(), listaPaciente1.getNome(), listaPaciente1.getCpf()});
-                } else if (listaPaciente1.getNome().equals(nome) && !listaPaciente1.getCpf().equals(cpf)) {
-                    throw new Exception("Dados Incorretos !! Nome e CPF não conferem");
+            }else
+            if(cpf != null){
+                if(codigo == null){
+                    if(this.listaPaciente.get(i).getCpf().equals(cpf)){
+                        modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                            this.listaPaciente.get(i).getNome(),
+                                            this.listaPaciente.get(i).getCpf()});
+                    }
+                }else
+                if(codigo != null){
+                    if(this.listaPaciente.get(i).getCpf().equals(cpf) &&
+                            this.listaPaciente.get(i).getCodigo().equals(codigo)){
+                        modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                            this.listaPaciente.get(i).getNome(),
+                                            this.listaPaciente.get(i).getCpf()});
+                    }
                 }
-            } else if (codigo != null && !nome.isEmpty() && cpf == null) {
-                if (listaPaciente1.getCodigo().equals(codigo) && listaPaciente1.getNome().equals(nome)) {
-                    modelo.addRow(new Object[]{listaPaciente1.getCodigo(), listaPaciente1.getNome(), listaPaciente1.getCpf()});
-                } else if (listaPaciente1.getCodigo().equals(codigo) && !listaPaciente1.getNome().equals(nome)) {
-                    throw new Exception("Dados Incorretos !! Codigo e Nome não conferem");
+            }else
+            if(codigo != null){
+                if(this.listaPaciente.get(i).getCodigo().equals(codigo)){
+                    modelo.addRow(new Object[] {this.listaPaciente.get(i).getCodigo(),
+                                            this.listaPaciente.get(i).getNome(),
+                                            this.listaPaciente.get(i).getCpf()});
                 }
-            } else if (codigo != null && nome.isEmpty() && cpf == null) {
-                // Verifica pelo Codigo
-                if (listaPaciente1.getCodigo().equals(codigo)) {
-                    modelo.addRow(new Object[]{listaPaciente1.getCodigo(), listaPaciente1.getNome(), listaPaciente1.getCpf()});
-                }
-            } else if (codigo == null && !nome.isEmpty() && cpf == null) {
-                // Verifica pelo nome
-                if (listaPaciente1.getNome().contains(nome)) {
-                    modelo.addRow(new Object[]{listaPaciente1.getCodigo(), listaPaciente1.getNome(), listaPaciente1.getCpf()});
-                }
-            } else if (codigo == null && nome.isEmpty() && cpf != null) {
-                // Verifica pelo CPF
-                if (listaPaciente1.getCpf().equals(cpf)) {
-                    modelo.addRow(new Object[]{listaPaciente1.getCodigo(), listaPaciente1.getNome(), listaPaciente1.getCpf()});
-                }
-            } else if (codigo == null && nome.isEmpty() && cpf == null) {
-                // Verifica se todos esta nulos
-                modelo.addRow(new Object[]{listaPaciente1.getCodigo(), listaPaciente1.getNome(), listaPaciente1.getCpf()});
             }
+                
         }
 
         if(modelo.getRowCount() != 0){
              return modelo;
         } else {
-            throw new Exception("Nenhum dado cadastrado");
+            throw new Exception("Nenhum dado cadastrado, com esses dados");
         }
 
 
@@ -348,6 +398,14 @@ public class ConsultarPacienteUI extends javax.swing.JInternalFrame {
                        throw new Exception("Contem numero no nome");
                 }
           }
+    }
+    
+    private void zerarLista(){
+         try {
+            this.listaPaciente = PacienteController.obterInstancia().listarPaciente();
+        } catch (Exception ex) {
+            Logger.getLogger(ConsultarPacienteUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -60,7 +60,7 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
         
         if(consulta != null){
             consultaAnt = consulta;
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             JFTDataConsulta.setText(sdf.format(consulta.getData()));
             //JTAProcedimento.setText(consulta.getProcedimento()); Virou ComboBOX
             JTAObservacao.setText(consulta.getObservacao());
@@ -216,12 +216,6 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
         }
 
         JLProcedimento.setText("Procedimento:");
-
-        JCBProcedimento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JCBProcedimentoActionPerformed(evt);
-            }
-        });
 
         JPainelMedico.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Médico", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
 
@@ -444,9 +438,9 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
                 
                 try{
                     // Manipulação da Data 
-                    Date data;
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-                    data = (Date) sdf.parse(JFTDataConsulta.getText());
+                    
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    Date data = sdf.parse(JFTDataConsulta.getText());
                     consultaAnt.setData(data);
                 }catch(ParseException e){}
                 
@@ -475,9 +469,8 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
 
                 try{
                     // Manipulação da Data 
-                    Date data;
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-                    data = (Date) sdf.parse(JFTDataConsulta.getText());
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    Date data = sdf.parse(JFTDataConsulta.getText());
                     consulta.setData(data);
                 }catch(ParseException e){}
 
@@ -489,10 +482,6 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
            JOptionPane.showMessageDialog(this, "Erro: "+e.getMessage(),"ERRO",0);
         }
     }//GEN-LAST:event_JBSalvarActionPerformed
-
-    private void JCBProcedimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JCBProcedimentoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_JCBProcedimentoActionPerformed
             
     private DefaultTableModel verificarPaciente(DefaultTableModel modelo) throws Exception{
        String nome = JTFNomePaciente.getText();
@@ -533,7 +522,11 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
           }
        }
        
-       return modelo;
+        if(modelo.getRowCount() != 0){
+            return modelo;
+        }else{
+            throw new Exception("Nenhum dado Cadastrado com esses dados");
+        }
     }
        
     private DefaultTableModel verificarMedico(DefaultTableModel modelo) throws Exception{
@@ -566,7 +559,11 @@ public class CadastrarConsultaUI extends javax.swing.JInternalFrame {
             }
         }
               
-       return modelo;
+        if(modelo.getRowCount() != 0){
+            return modelo;
+        }else{
+            throw new Exception("Nenhum dado Cadastrado com esses dados");
+        }
     }
     
      private void comboBoxProcedimento(){

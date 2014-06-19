@@ -7,6 +7,7 @@ package view;
 import controller.ConsultaController;
 import controller.PacienteController;
 import controller.ProcedimentoController;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -37,11 +38,7 @@ public class RelatorioPacienteUI extends javax.swing.JInternalFrame {
     public RelatorioPacienteUI() {
         initComponents();
         ComboBox();
-        try {
-            this.listaConsulta = ConsultaController.obterInstancia().listarEspecial();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "ERRO: Lista - " + ex.getMessage());
-        }
+        this.obterLista();
     }
 
     /**
@@ -262,13 +259,18 @@ public class RelatorioPacienteUI extends javax.swing.JInternalFrame {
 
     private DefaultTableModel verificaFiltros(DefaultTableModel modelo) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-        try{
-            Date dataInicio = sdf.parse(JFTDataInicio.getText());
-            Date dataFim = sdf.parse(JFTDataFim.getText());
-        }catch(Exception ex){
-            throw new Exception("Data");
+        if(!JFTDataInicio.getText().equals("  /  /    ") || !JFTDataFim.getText().equals("  /  /    ")){
+            try{
+                Date dataInicio = sdf.parse(JFTDataInicio.getText());
+                Date dataFim = sdf.parse(JFTDataFim.getText());
+                this.listaConsulta = ConsultaController.obterInstancia().listarRelatorioData(dataInicio, dataFim);
+            }catch(ParseException ex){
+                throw new Exception("Utilize as duas datas");
+            }
+        }else{
+            this.obterLista();
         }
-        
+          
         String nome = JTFPaciente.getText();
         String cpf = JFTFCpf.getText();
         Integer index = JCBProcedimento.getSelectedIndex();
@@ -284,38 +286,32 @@ public class RelatorioPacienteUI extends javax.swing.JInternalFrame {
             if (nome.isEmpty() && cpf == null && index == 0) {
                 modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
                     this.listaConsulta.get(i).getPacienteNome()});
-            } else if (!nome.isEmpty()) {
+            } else 
+            if (!nome.isEmpty()) {
                 if (cpf == null && index == 0) {
-                    if (this.listaConsulta.get(i).getPacienteNome().equals(nome)) {
+                    if (this.listaConsulta.get(i).getPacienteNome().contains(nome)) {
                         modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
                             this.listaConsulta.get(i).getPacienteNome()});
-                    } else {
-                        throw new Exception("Nenhuma consulta cadastrado com esse paciente");
                     }
                 } else if (cpf != null && index == 0) {
-                    if (this.listaConsulta.get(i).getPacienteNome().equals(nome)
+                    if (this.listaConsulta.get(i).getPacienteNome().contains(nome)
                             && this.listaConsulta.get(i).getPacienteCPF().equals(cpf)) {
                         modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
                             this.listaConsulta.get(i).getPacienteNome()});
-                    } else {
-                        throw new Exception("Nome e CPF não conferem");
                     }
                 } else if (cpf == null && index != 0) {
-                    if (this.listaConsulta.get(i).getPacienteNome().equals(nome)
+                    if (this.listaConsulta.get(i).getPacienteNome().contains(nome)
                             && this.listaConsulta.get(i).getCodProcedimento().equals(index)) {
                         modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
                             this.listaConsulta.get(i).getPacienteNome()});
-                    } else {
-                        throw new Exception("O Nome selecionado não fez esse Procedimento");
                     }
-                } else if (cpf != null && index != 0) {
-                    if (this.listaConsulta.get(i).getPacienteNome().equals(nome)
+                } else 
+                if (cpf != null && index != 0) {
+                    if (this.listaConsulta.get(i).getPacienteNome().contains(nome)
                             && this.listaConsulta.get(i).getPacienteCPF().equals(cpf)
                             && this.listaConsulta.get(i).getCodProcedimento().equals(index)) {
                         modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
                             this.listaConsulta.get(i).getPacienteNome()});
-                    } else {
-                        throw new Exception("Os dados não conferem");
                     }
                 }
             } else if (cpf != null) {
@@ -324,21 +320,18 @@ public class RelatorioPacienteUI extends javax.swing.JInternalFrame {
                         modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
                             this.listaConsulta.get(i).getPacienteNome()});
                     }
-                } else if (index != 0) {
+                } else 
+                if (index != 0) {
                     if (this.listaConsulta.get(i).getPacienteCPF().equals(cpf)
                             && this.listaConsulta.get(i).getCodProcedimento().equals(index)) {
                         modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
                             this.listaConsulta.get(i).getPacienteNome()});
-                    } else {
-                        throw new Exception("O Paciente com esse CPF não fez esse Procedimento");
                     }
                 }
             } else if (index != 0) {
                 if (this.listaConsulta.get(i).getCodProcedimento().equals(index)) {
                     modelo.addRow(new Object[]{this.listaConsulta.get(i).getPacienteCodigo(),
                         this.listaConsulta.get(i).getPacienteNome()});
-                } else {
-                    throw new Exception("Nenhum Paciente fez esse procedimento");
                 }
             }
 
@@ -354,6 +347,14 @@ public class RelatorioPacienteUI extends javax.swing.JInternalFrame {
     private void zerarModelo() {
         modelo = new DefaultTableModel();
         modelo.setColumnIdentifiers(new String[]{"Codigo", "Nome"});
+    }
+    
+    private void obterLista(){
+        try {
+            this.listaConsulta = ConsultaController.obterInstancia().listarEspecial();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "ERRO: Lista - " + ex.getMessage());
+        }
     }
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
