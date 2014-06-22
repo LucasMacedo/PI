@@ -27,8 +27,5 @@ insert into procedimento(descricao) values
 
 
 
-select * from consulta;
-
-
 
 
