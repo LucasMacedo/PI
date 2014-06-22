@@ -21,6 +21,7 @@ import model.Consulta;
 import model.Consulta_Paciente;
 import model.Paciente;
 import model.Procedimento;
+import relatorio.GerarPdf;
 
 /**
  *
@@ -232,7 +233,24 @@ public class RelatorioPacienteUI extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBExportarActionPerformed
-        // TODO add your handling code here:
+        Integer index = JTabelaPaciente.getSelectedRow();
+        Integer codigoPaciente;
+        try{
+           if( index >= 0){
+               codigoPaciente = (int) JTabelaPaciente.getValueAt(index, 0);
+           }else{
+               throw new Exception("Nenhum paciente foi selecionado");
+           }
+           
+           GerarPdf gera = new GerarPdf(codigoPaciente);
+           JOptionPane.showMessageDialog(this, "Arquivo exportado com sucesso ! \n"
+                   + "\\Relatorio\\nomePaciente.pdf");
+           
+        }catch(Exception ex){         
+            JOptionPane.showMessageDialog(this, "ERRO: "+ex.getMessage());
+        }
+        
+        
     }//GEN-LAST:event_JBExportarActionPerformed
 
     private void JBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBPesquisarActionPerformed

@@ -14,9 +14,13 @@ import java.util.Date;
  */
 public class Consulta_Paciente {
     private Integer consultaCodigo;
+    private Integer medicoCodigo;
     private Integer pacienteCodigo;
     private String pacienteNome;
     private String pacienteCPF;
+    private String pacienteFone;
+    private String pacienteEndereco;
+    private String pacienteEmail;
     private Integer codProcedimento;
     private Date consultaData;
 
@@ -78,6 +82,40 @@ public class Consulta_Paciente {
     public void setConsultaData(Date consultaData) {
         this.consultaData = consultaData;
     }
+
+    public Integer getMedicoCodigo() {
+        return medicoCodigo;
+    }
+
+    public void setMedicoCodigo(Integer medicoCodigo) {
+        this.medicoCodigo = medicoCodigo;
+    }
+
+    public String getPacienteFone() {
+        return pacienteFone;
+    }
+
+    public void setPacienteFone(String pacienteFone) {
+        this.pacienteFone = pacienteFone;
+    }
+
+    public String getPacienteEndereco() {
+        return pacienteEndereco;
+    }
+
+    public void setPacienteEndereco(String pacienteEndereco) {
+        this.pacienteEndereco = pacienteEndereco;
+    }
+
+    public String getPacienteEmail() {
+        return pacienteEmail;
+    }
+
+    public void setPacienteEmail(String pacienteEmail) {
+        this.pacienteEmail = pacienteEmail;
+    }
+    
+    
     
     
     
