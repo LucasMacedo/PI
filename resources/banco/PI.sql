@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `Paciente` (
 
 CREATE TABLE IF NOT EXISTS `Procedimento` (
   `codProcedimento` INT NOT NULL AUTO_INCREMENT,
-  `descricao` VARCHAR(45) NULL,
+  `descricao` VARCHAR(200) NULL,
   PRIMARY KEY (`codProcedimento`));
 
 CREATE TABLE IF NOT EXISTS `Consulta` (
